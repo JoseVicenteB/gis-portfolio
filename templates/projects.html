@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="page-hero shell">
+  <p class="eyebrow"><span></span> Project archive</p>
+  <div class="page-hero-grid"><h1>A collection of<br><em>spatial questions.</em></h1><p>Exploring landscapes through satellite imagery, vectors, rasters, and coordinate systems. Every map is generated with a documented Python workflow.</p></div>
+</header>
+
+<section class="section shell project-archive" aria-labelledby="archive-title">
+  <div class="archive-toolbar">
+    <h2 class="sr-only" id="archive-title">All projects</h2>
+    <div class="filter-list" aria-label="Filter projects by theme" data-filters>
+      <button type="button" data-filter="All" aria-pressed="true">All <span>{{ projects|length }}</span></button>
+      {% for tag in ['Remote Sensing', 'Cartography', 'Python'] %}
+      <button type="button" data-filter="{{ tag }}" aria-pressed="false">{{ tag }} <span>{{ tag_counts[tag] }}</span></button>
+      {% endfor %}
+    </div>
+    <p class="archive-count" aria-live="polite" data-filter-count>{{ projects|length }} projects</p>
+  </div>
+  <div class="project-grid archive-grid" data-project-grid>
+    {% for project in projects %}
+    <article class="project-card" data-project-card data-tags="{{ project.tags|join('|') }}">
+      <a class="project-image map-frame" href="{{ url('projects/' + project.slug + '/') }}" aria-label="View {{ project.title }}">
+        <img src="{{ url(project.hero) }}" srcset="{{ srcset(project.hero) }}" sizes="(max-width: 700px) 92vw, 46vw" alt="{{ project.hero_alt }}" width="1600" height="1100">
+        <span class="image-index">0{{ loop.index }}</span><span class="image-arrow" aria-hidden="true">↗</span>
+      </a>
+      <div class="project-card-body">
+        <div class="tag-row">{% for tag in project.tags %}<span>{{ tag }}</span>{% endfor %}<time>{{ project.date }}</time></div>
+        <h2><a href="{{ url('projects/' + project.slug + '/') }}">{{ project.title }}</a></h2>
+        <p>{{ project.summary }}</p>
+        <a class="project-link" href="{{ url('projects/' + project.slug + '/') }}">View case study <span aria-hidden="true">→</span></a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  <p class="empty-state" data-empty-state hidden>No projects match this filter yet.</p>
+</section>
+
+<section class="shell archive-note">
+  <p class="eyebrow">Work in progress</p>
+  <div><h2>A portfolio that grows<br>with each new question.</h2><p>These reproducible demonstrations establish the visual and technical foundation. Future coursework in land-cover classification, change detection, and spatial analysis can use the same project template.</p></div>
+</section>
+{% endblock %}

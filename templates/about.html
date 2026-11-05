@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="page-hero about-hero shell">
+  <p class="eyebrow"><span></span> About me</p>
+  <div class="page-hero-grid"><h1>Curious about place.<br><em>Precise with data.</em></h1><p>{{ site.bio }}</p></div>
+</header>
+
+<section class="shell about-profile">
+  <div class="profile-graphic" aria-label="Abstract contour illustration representing Dublin">
+    <svg viewBox="0 0 600 650" role="img" aria-hidden="true">
+      {% for i in range(9) %}<path d="M{{ -40 + i * 12 }} {{ 470 - i * 30 }} C {{ 100 + i * 8 }} {{ 350 - i * 18 }}, {{ 190 - i * 5 }} {{ 510 - i * 35 }}, {{ 290 + i * 3 }} {{ 330 - i * 18 }} S {{ 480 - i * 8 }} {{ 210 + i * 9 }}, {{ 650 - i * 10 }} {{ 110 + i * 18 }}"/>{% endfor %}
+    </svg>
+    <div class="profile-monogram">{{ site.short_name }}</div>
+    <span class="profile-caption">DUBLIN, IRELAND<br>53.3498° N / 6.2603° W</span>
+  </div>
+  <div class="profile-copy"><p class="eyebrow">My perspective</p><h2>Geography is both<br>a lens and a method.</h2><p>My master’s studies are building a foundation in GIS, remote sensing, and spatial data science. I’m especially interested in the point where rigorous processing becomes a clear visual explanation.</p><p>This site documents that learning process. The demonstrations are intentionally transparent about their inputs and limits; as my coursework develops, the portfolio will grow to include new analyses, research questions, and places.</p><div class="education-card"><span class="note-label">Current studies</span><h3>MSc GIS &amp; Remote Sensing</h3><p>University College Dublin</p><span>Master’s studies · Ireland</span></div></div>
+</section>
+
+<section class="section shell toolkit-section">
+  <div class="section-heading split-heading"><div><p class="eyebrow">Technical toolkit</p><h2>Open tools.<br>Transparent methods.</h2></div><p>A Python-centered workflow makes each transformation inspectable, repeatable, and easier to share.</p></div>
+  <div class="toolkit-grid">
+    {% for tool in [('GeoPandas', 'Vector data & spatial operations'), ('Rasterio', 'Raster access & georeferencing'), ('PyProj', 'CRS & coordinate transformations'), ('NumPy', 'Array analysis & spectral indices'), ('Matplotlib', 'Cartographic output & visual summaries'), ('QGIS', 'Interactive exploration & map checking')] %}<div><span>0{{ loop.index }}</span><h3>{{ tool[0] }}</h3><p>{{ tool[1] }}</p></div>{% endfor %}
+  </div>
+</section>
+
+<section class="shell home-cta"><div><p class="eyebrow">Collaborate</p><h2>Have a spatial question<br>worth exploring?</h2></div><a class="circle-link" href="{{ url('contact/') }}" aria-label="Go to contact page"><span>Get in touch</span><b aria-hidden="true">↗</b></a></section>
+{% endblock %}

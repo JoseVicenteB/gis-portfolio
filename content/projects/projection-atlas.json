@@ -1,0 +1,31 @@
+{
+  "slug": "projection-atlas",
+  "title": "The Projection Atlas",
+  "kicker": "Cartography / Coordinate systems",
+  "summary": "One world, three perspectives. A visual comparison of how map projections reshape geography.",
+  "featured": true,
+  "date": "2026",
+  "tags": ["Cartography", "Python"],
+  "hero": "generated/projections/equal-earth.webp",
+  "hero_alt": "World map in the Equal Earth projection with countries in muted greens and a fine graticule",
+  "question": "How does the choice of a coordinate reference system change the appearance and interpretation of a world map?",
+  "study_area": "Global, using 1:110m Natural Earth country boundaries.",
+  "outcome": "A matched set of maps makes projection distortion visible and connects each CRS to appropriate cartographic uses.",
+  "role": "Demonstration workflow: data preparation, CRS transformation, cartographic design, and web export with Python.",
+  "methods": [
+    {"title": "Read & validate", "text": "Load Natural Earth country polygons and confirm the geographic source CRS, EPSG:4326."},
+    {"title": "Transform", "text": "Reproject the same source geometries to Equal Earth, Web Mercator, and Robinson using GeoPandas and PyProj."},
+    {"title": "Design", "text": "Apply a consistent visual hierarchy, graticule, ocean treatment, and projection-specific extent."},
+    {"title": "Export", "text": "Render high-resolution maps with Matplotlib and produce responsive WebP assets for the site."}
+  ],
+  "tools": ["GeoPandas", "Shapely", "PyProj", "Matplotlib"],
+  "maps": [
+    {"id": "atlas-equal-earth", "title": "Equal Earth", "image": "generated/projections/equal-earth.webp", "alt": "World countries mapped with the Equal Earth projection", "caption": "An equal-area world view with a familiar, balanced overall shape.", "crs": "Equal Earth · EPSG:8857"},
+    {"id": "atlas-web-mercator", "title": "Web Mercator", "image": "generated/projections/web-mercator.webp", "alt": "World countries mapped with the Web Mercator projection, truncated near the poles", "caption": "Conformal and useful for web navigation, but high-latitude areas are greatly exaggerated.", "crs": "Web Mercator · EPSG:3857"},
+    {"id": "atlas-robinson", "title": "Robinson", "image": "generated/projections/robinson.webp", "alt": "World countries mapped with the Robinson projection", "caption": "A compromise projection designed for a visually pleasing world map rather than preserving one metric property.", "crs": "Robinson · ESRI:54030"}
+  ],
+  "data": [
+    {"name": "Admin 0 — Countries, 1:110m", "provider": "Natural Earth", "details": "Small-scale cultural vector boundaries; source CRS EPSG:4326.", "license": "Public domain", "url": "https://www.naturalearthdata.com/about/terms-of-use/"}
+  ],
+  "order": 1
+}

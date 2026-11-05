@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page_title == 'Home' %}{{ site.name }} — {{ site.role }}{% else %}{{ page_title }} — {{ site.name }}{% endif %}</title>
+  <meta name="description" content="{{ page_description }}">
+  <meta name="theme-color" content="#173f36">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ page_title }} — {{ site.name }}">
+  <meta property="og:description" content="{{ page_description }}">
+  <link rel="icon" href="{{ url('images/favicon.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ url('css/site.css') }}">
+  <script>document.documentElement.classList.replace('no-js', 'js');</script>
+  <script src="{{ url('js/site.js') }}" defer></script>
+  {% block extra_scripts %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-header>
+    <div class="shell header-inner">
+      <a class="brand" href="{{ url('') }}" aria-label="{{ site.name }}, home">
+        <svg class="brand-mark" viewBox="0 0 42 42" aria-hidden="true">
+          <path d="M4 29c6-10 11-2 17-12S32 6 38 10M4 36c7-10 13-3 20-13S33 12 38 16M4 21c5-8 10-1 15-10S29 2 35 4"/>
+        </svg>
+        <span class="brand-copy"><strong>{{ site.name }}</strong><span>GIS PORTFOLIO</span></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+        <span class="menu-label">Menu</span><span class="menu-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main navigation" data-nav>
+        <a href="{{ url('projects/') }}" {% if active_page == 'Projects' %}aria-current="page"{% endif %}>Projects</a>
+        <a href="{{ url('projections/') }}" {% if active_page == 'Projection Lab' %}aria-current="page"{% endif %}>Projection Lab</a>
+        <a href="{{ url('about/') }}" {% if active_page == 'About' %}aria-current="page"{% endif %}>About</a>
+        <a class="nav-contact" href="{{ url('contact/') }}" {% if active_page == 'Contact' %}aria-current="page"{% endif %}>Let’s talk <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-top">
+      <div>
+        <a class="footer-brand" href="{{ url('') }}">{{ site.name }}<span>↗</span></a>
+        <p>Exploring place, pattern, and change<br>through spatial data.</p>
+      </div>
+      <div class="footer-links">
+        <div><span class="footer-label">Explore</span><a href="{{ url('projects/') }}">Projects</a><a href="{{ url('projections/') }}">Projection Lab</a><a href="{{ url('about/') }}">About</a></div>
+        <div><span class="footer-label">Connect</span><a href="{{ url('contact/') }}">Contact</a>{% if site.github %}<a href="{{ site.github }}" rel="me">GitHub</a>{% endif %}{% if site.linkedin %}<a href="{{ site.linkedin }}" rel="me">LinkedIn</a>{% endif %}</div>
+      </div>
+    </div>
+    <div class="shell footer-bottom">
+      <span>© {{ year }} {{ site.name }}</span>
+      <span>Built with Python &amp; a curiosity about place.</span>
+      <a href="{{ url('projects/projection-atlas/#data') }}">Data &amp; attribution</a>
+    </div>
+  </footer>
+
+  <dialog class="map-dialog" data-map-dialog aria-label="Enlarged map">
+    <button class="dialog-close" type="button" data-dialog-close aria-label="Close enlarged map">×</button>
+    <img data-dialog-image src="" alt="">
+    <p data-dialog-caption></p>
+  </dialog>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "Your Name",
+  "short_name": "YN",
+  "role": "GIS & Remote Sensing",
+  "program": "MSc student in GIS and Remote Sensing at University College Dublin",
+  "intro": "Turning spatial data into clear, useful stories about our changing world.",
+  "bio": "I am a master's student at University College Dublin, developing practical skills in spatial analysis, cartography, and Earth observation. This portfolio brings together reproducible Python workflows and maps that make geographic questions easier to explore.",
+  "email": "",
+  "github": "",
+  "linkedin": "",
+  "cv": "",
+  "skills": [
+    {"name": "Spatial analysis", "detail": "Vector & raster workflows"},
+    {"name": "Remote sensing", "detail": "Spectral indices & imagery"},
+    {"name": "Cartography", "detail": "Projections & visual hierarchy"},
+    {"name": "Python", "detail": "Reproducible geospatial pipelines"}
+  ]
+}

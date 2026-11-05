@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="home-hero shell">
+  <div class="hero-copy">
+    <p class="eyebrow"><span></span> Spatial analysis · Earth observation</p>
+    <h1>Maps that make<br><em>sense of change.</em></h1>
+    <p class="hero-intro">{{ site.intro }} A portfolio of GIS and remote-sensing projects built with open data and reproducible Python.</p>
+    <div class="button-row">
+      <a class="button button-primary" href="{{ url('projects/') }}">Explore projects <span aria-hidden="true">↗</span></a>
+      <a class="text-link" href="{{ url('about/') }}">More about me <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="hero-meta">
+      <span>Based in Dublin, Ireland</span>
+      <span>MSc GIS &amp; Remote Sensing</span>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="map-frame hero-map-frame">
+      <div class="map-frame-top"><span>THE PROJECTION ATLAS</span><span>01 / 03</span></div>
+      <img src="{{ url('generated/projections/equal-earth.webp') }}" srcset="{{ srcset('generated/projections/equal-earth.webp') }}" sizes="(max-width: 800px) 92vw, 50vw" alt="Equal Earth world map generated with Python" width="1800" height="1080">
+      <button class="map-expand" type="button" data-map-expand data-full="{{ url('generated/projections/equal-earth.webp') }}" data-alt="Enlarged Equal Earth world map" data-caption="Equal Earth · EPSG:8857 · Natural Earth">View full map <span aria-hidden="true">↗</span></button>
+    </div>
+    <div class="hero-coordinate" aria-hidden="true"><span>53.3498° N</span><span>6.2603° W</span></div>
+  </div>
+</section>
+
+<section class="discipline-strip" aria-label="Areas of focus">
+  <div class="shell discipline-inner">
+    <span>01 / OBSERVE</span><i></i><span>02 / ANALYZE</span><i></i><span>03 / COMMUNICATE</span>
+  </div>
+</section>
+
+<section class="section shell" id="selected-work">
+  <div class="section-heading split-heading">
+    <div><p class="eyebrow">Selected work</p><h2>Spatial questions,<br>visual answers.</h2></div>
+    <p>From satellite imagery to coordinate systems, each project pairs a clear geographic question with a transparent, reproducible workflow.</p>
+  </div>
+  <div class="project-grid featured-grid">
+    {% for project in featured %}
+    <article class="project-card project-card-{{ loop.index }}">
+      <a class="project-image map-frame" href="{{ url('projects/' + project.slug + '/') }}" aria-label="View {{ project.title }}">
+        <img src="{{ url(project.hero) }}" srcset="{{ srcset(project.hero) }}" sizes="(max-width: 700px) 92vw, 55vw" alt="{{ project.hero_alt }}" loading="lazy" width="1600" height="1100">
+        <span class="image-index">0{{ loop.index }}</span>
+        <span class="image-arrow" aria-hidden="true">↗</span>
+      </a>
+      <div class="project-card-body">
+        <div class="tag-row">{% for tag in project.tags %}<span>{{ tag }}</span>{% endfor %}<time>{{ project.date }}</time></div>
+        <h3><a href="{{ url('projects/' + project.slug + '/') }}">{{ project.title }}</a></h3>
+        <p>{{ project.summary }}</p>
+        <a class="project-link" href="{{ url('projects/' + project.slug + '/') }}">View case study <span aria-hidden="true">→</span></a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  <a class="button button-outline section-button" href="{{ url('projects/') }}">Browse all projects <span aria-hidden="true">↗</span></a>
+</section>
+
+<section class="approach-section">
+  <div class="shell approach-grid">
+    <div class="approach-intro"><p class="eyebrow light">My approach</p><h2>Good maps start<br>with good questions.</h2><p>I care about the full path from raw data to visual story: choosing suitable inputs, understanding their limits, and making the result legible.</p></div>
+    <ol class="approach-list">
+      <li><span>01</span><div><h3>Observe</h3><p>Start with a place, a question, and data whose resolution and provenance fit the task.</p></div></li>
+      <li><span>02</span><div><h3>Analyze</h3><p>Build transparent spatial workflows in Python, with explicit CRS handling and documented decisions.</p></div></li>
+      <li><span>03</span><div><h3>Communicate</h3><p>Use cartography to reveal the pattern without hiding uncertainty or overstating the result.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section shell skills-section">
+  <div class="section-heading split-heading"><div><p class="eyebrow">Toolkit</p><h2>Across the spatial<br>data lifecycle.</h2></div><p>A growing technical toolkit grounded in my master’s studies and a broader interest in how geography explains change.</p></div>
+  <div class="skills-grid">
+    {% for skill in site.skills %}<div class="skill-item"><span>0{{ loop.index }}</span><h3>{{ skill.name }}</h3><p>{{ skill.detail }}</p></div>{% endfor %}
+  </div>
+</section>
+
+<section class="shell home-cta">
+  <div><p class="eyebrow">Next step</p><h2>Interested in working<br>with spatial data?</h2></div>
+  <a class="circle-link" href="{{ url('contact/') }}" aria-label="Get in touch"><span>Let’s talk</span><b aria-hidden="true">↗</b></a>
+</section>
+{% endblock %}
