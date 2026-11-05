@@ -8,7 +8,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from PIL import Image
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path.cwd()
 RAW_DATA = ROOT / "data" / "raw"
 GENERATED = ROOT / "static" / "generated"
 

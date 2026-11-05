@@ -8,7 +8,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path.cwd()
 CONTENT = ROOT / "content"
 TEMPLATES = ROOT / "templates"
 STATIC = ROOT / "static"
