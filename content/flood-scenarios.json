@@ -1,0 +1,76 @@
+{
+  "model_version": "1.0.0",
+  "study_bounds_itm": [712000, 731500, 722000, 737500],
+  "analysis_resolution_m": 5,
+  "display_resolution_m": 20,
+  "duration_hours": 48,
+  "frame_interval_minutes": 60,
+  "minimum_mapped_depth_m": 0.05,
+  "street_depth_threshold_m": 0.05,
+  "vertical_exaggeration": 1.6,
+  "channel": {
+    "manning_n": 0.04,
+    "upstream_width_m": 60,
+    "downstream_width_m": 120,
+    "default_energy_slope": 0.0004,
+    "note": "Widths and the fallback energy slope are explicit reduced-model assumptions, not surveyed channel dimensions. Manning n=0.04 is reported for the Lower Liffey in-bank domain in OPW Hydraulics Report section 4.7.3.7."
+  },
+  "hydrograph": {
+    "peak_hour": 24,
+    "shape": 5.5,
+    "baseflow": "qmed",
+    "note": "A normalised gamma-shaped design hydrograph represents the rising and receding limb; Qmed is used as the pre-event reference flow. It is not a reconstructed historical flood."
+  },
+  "upstream_node": {
+    "id": "09_1870_13_RPS",
+    "catchment_area_km2": 812.02,
+    "qmed_m3s": 107.45,
+    "source": "OPW Eastern CFRAM Hydrology Report, Appendix D, Model 2C"
+  },
+  "downstream_flow_node": {
+    "id": "09_631_D",
+    "catchment_area_km2": 1020.307,
+    "qmed_m3s": 132.605,
+    "source": "OPW Eastern CFRAM Hydrology Report, Appendix D, Model 2C"
+  },
+  "coastal_node": {
+    "id": "NE_19",
+    "vertical_datum": "OD Malin",
+    "source": "OPW Eastern CFRAM Hydraulics Report, Table 4.7.2; published extreme coastal levels include tide, surge and seiching allowances"
+  },
+  "tide": {
+    "station": "Dublin_Port",
+    "prediction_window_utc": "2027-01-14/2027-01-18",
+    "period_hours": 12.42,
+    "source": "Marine Institute IMI_TidePrediction_HighLow, high/low predictions in OD Malin"
+  },
+  "scenarios": [
+    {
+      "id": "aep10",
+      "aep_percent": 10,
+      "label": "10% AEP",
+      "return_period_years": 10,
+      "peak_upstream_flow_m3s": 148.39,
+      "peak_downstream_flow_m3s": 203.02,
+      "coastal_peak_m": 2.67
+    },
+    {
+      "id": "aep1",
+      "aep_percent": 1,
+      "label": "1% AEP",
+      "return_period_years": 100,
+      "peak_upstream_flow_m3s": 186.86,
+      "peak_downstream_flow_m3s": 252.75,
+      "coastal_peak_m": 3.0
+    },
+    {
+      "id": "aep01",
+      "aep_percent": 0.1,
+      "label": "0.1% AEP",
+      "return_period_years": 1000,
+      "peak_upstream_flow_m3s": 273.89,
+      "peak_downstream_flow_m3s": 338.01,
+      "coastal_peak_m": 3.34
+    }
+  ]
+}

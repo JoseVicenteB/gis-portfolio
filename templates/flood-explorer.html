@@ -1,0 +1,50 @@
+<section class="flood-explorer" data-flood-explorer data-assets-url="{{ url('generated/flood') }}" aria-labelledby="flood-explorer-title">
+  <div class="section-heading split-heading flood-heading">
+    <div><p class="eyebrow">Interactive 3D model</p><h2 id="flood-explorer-title">Watch the water move.</h2></div>
+    <p>Orbit the Lower Liffey, change the design event, and scrub through 48 hours of prescribed river flows and coastal water levels.</p>
+  </div>
+  <div class="flood-warning"><strong>Simulated scenario—not a live forecast.</strong><span>Do not use this educational model for emergency, property, or road-safety decisions.</span></div>
+  <div class="flood-toolbar">
+    <label><span>Design event</span><select data-flood-scenario>
+      <option value="aep10">10% AEP · 10-year</option>
+      <option value="aep1" selected>1% AEP · 100-year</option>
+      <option value="aep01">0.1% AEP · 1,000-year</option>
+    </select></label>
+    <div class="flood-layer-options" aria-label="Map layers">
+      <label><input type="checkbox" checked data-flood-water-toggle> Flood water</label>
+      <label><input type="checkbox" checked data-flood-streets-toggle> Streets</label>
+    </div>
+    <div class="flood-view-buttons" aria-label="Camera views">
+      <button type="button" data-flood-action="reset">3D view</button>
+      <button type="button" data-flood-action="top">Top-down</button>
+    </div>
+  </div>
+  <div class="flood-layout">
+    <div class="flood-map map-frame" data-flood-map>
+      <img class="flood-fallback" data-flood-fallback src="{{ url(project.hero) }}" alt="Static map of peak modelled inundation along the Lower Liffey during the 1% AEP scenario" width="1800" height="1080">
+      <p class="flood-loading" data-flood-loading>Loading terrain and scenario frames…</p>
+      <div class="flood-label-layer" data-flood-labels aria-hidden="true"></div>
+      <div class="flood-map-key"><span class="flood-depth-gradient" aria-hidden="true"></span><span>0 m</span><span>3.5+ m</span><small>Modelled depth</small></div>
+      <div class="flood-orientation" aria-hidden="true">ITM · metres</div>
+    </div>
+    <aside class="flood-dashboard" aria-label="Current scenario summary">
+      <div class="flood-current-time"><span>Scenario clock</span><strong data-flood-time>T+24:00</strong></div>
+      <dl class="flood-metrics">
+        <div><dt>Connected inundation</dt><dd data-flood-area>—</dd></div>
+        <div><dt>Streets above 0.05 m</dt><dd data-flood-roads>—</dd></div>
+        <div><dt>Maximum land depth</dt><dd data-flood-depth>—</dd></div>
+      </dl>
+      <p class="flood-metric-note">Model outputs for the selected hour. “Affected” indicates modelled water above a threshold, not an observed or official closure.</p>
+      <div class="flood-chart-wrap"><span class="note-label">Boundary conditions</span><svg viewBox="0 0 280 110" data-flood-chart role="img" aria-label="Downstream flow and coastal water level over the 48-hour scenario"></svg><div class="flood-chart-legend"><span class="flow">River flow</span><span class="coast">Coastal level</span></div></div>
+      <p class="flood-instructions">Drag to orbit · Right-drag to pan · Scroll or pinch to zoom · Arrow keys pan when the map is focused</p>
+    </aside>
+  </div>
+  <div class="flood-playback">
+    <button class="flood-play" type="button" data-flood-action="play" aria-pressed="false">Play</button>
+    <label class="sr-only" for="flood-timeline">Scenario time in hours</label>
+    <input id="flood-timeline" data-flood-timeline type="range" min="0" max="48" step="1" value="24">
+    <label class="flood-speed"><span>Speed</span><select data-flood-speed><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label>
+  </div>
+  <p class="flood-attribution">Terrain: <a href="https://www.arcgis.com/home/item.html?id=0cf979c135744df5bf51b11df9a6d820" target="_blank" rel="noopener noreferrer">GSI &amp; OPW, CC BY 4.0</a> · Tide: <a href="https://erddap.marine.ie/erddap/tabledap/IMI_TidePrediction_HighLow.html" target="_blank" rel="noopener noreferrer">Marine Institute, CC BY 4.0</a> · Streets: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors, ODbL</a>. AEP is annual exceedance probability, not a guaranteed return interval.</p>
+  <p class="sr-only" aria-live="polite" data-flood-status></p>
+</section>

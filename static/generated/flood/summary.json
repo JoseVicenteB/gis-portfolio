@@ -1,0 +1,35 @@
+{
+  "model_version": "1.0.0",
+  "river_length_km": 5.08,
+  "analysis_resolution_m": 5,
+  "display_resolution_m": 20,
+  "source_tile_count": 23,
+  "dtm_coverage_percentage": 85.4,
+  "frame_count": 49,
+  "default_peak_wet_area_km2": 3.5642,
+  "default_peak_affected_road_km": 61.372,
+  "default_max_depth_m": 3.852,
+  "scenarios": [
+    {
+      "id": "aep10",
+      "label": "10% AEP",
+      "peak_wet_area_km2": 1.431,
+      "max_depth_m": 3.522,
+      "peak_frame": 24
+    },
+    {
+      "id": "aep1",
+      "label": "1% AEP",
+      "peak_wet_area_km2": 3.564,
+      "max_depth_m": 3.852,
+      "peak_frame": 24
+    },
+    {
+      "id": "aep01",
+      "label": "0.1% AEP",
+      "peak_wet_area_km2": 4.382,
+      "max_depth_m": 4.192,
+      "peak_frame": 24
+    }
+  ]
+}

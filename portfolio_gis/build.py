@@ -30,6 +30,10 @@ def load_projects() -> list[dict]:
         for image in [project["hero"], *(item["image"] for item in project["maps"])]:
             if not STATIC.joinpath(image).is_file():
                 raise FileNotFoundError(f"Generate the required map first: static/{image}")
+        if project.get("viewer") == "flood":
+            for asset in ("manifest.json", "summary.json", "terrain.bin", "terrain.webp", "streets.geojson"):
+                if not STATIC.joinpath("generated", "flood", asset).is_file():
+                    raise FileNotFoundError(f"Generate the required flood asset first: static/generated/flood/{asset}")
         projects.append(project)
     projects.sort(key=lambda item: item.get("order", 999))
     slugs = [project["slug"] for project in projects]
@@ -53,6 +57,13 @@ def add_statistics(projects: list[dict]) -> None:
                 {"value": str(summary["projection_count"]), "label": "Projections compared"},
                 {"value": str(summary["country_count"]), "label": "Country boundaries"},
                 {"value": "1", "label": "Shared source dataset"},
+            ]
+        elif project["slug"] == "dublin-liffey-flood":
+            summary = load_json(STATIC / "generated" / "flood" / "summary.json")
+            project["stats"] = [
+                {"value": f'{summary["default_peak_wet_area_km2"]:.2f} km²', "label": "Peak connected land inundation · 1% AEP"},
+                {"value": f'{summary["default_peak_affected_road_km"]:.1f} km', "label": "Streets above 0.05 m · model maximum"},
+                {"value": str(summary["frame_count"]), "label": "Hourly frames per design scenario"},
             ]
 
 
