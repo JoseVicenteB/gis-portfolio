@@ -1,5 +1,5 @@
 {
-  "model_version": "1.0.0",
+  "model_version": "1.1.0",
   "river_length_km": 5.08,
   "analysis_resolution_m": 5,
   "display_resolution_m": 20,
@@ -13,6 +13,7 @@
     {
       "id": "aep10",
       "label": "10% AEP",
+      "kind": "design",
       "peak_wet_area_km2": 1.431,
       "max_depth_m": 3.522,
       "peak_frame": 24
@@ -20,6 +21,7 @@
     {
       "id": "aep1",
       "label": "1% AEP",
+      "kind": "design",
       "peak_wet_area_km2": 3.564,
       "max_depth_m": 3.852,
       "peak_frame": 24
@@ -27,9 +29,34 @@
     {
       "id": "aep01",
       "label": "0.1% AEP",
+      "kind": "design",
       "peak_wet_area_km2": 4.382,
       "max_depth_m": 4.192,
       "peak_frame": 24
+    },
+    {
+      "id": "aep1-reservoir",
+      "label": "1% AEP \u00b7 reservoir routing",
+      "kind": "reservoir",
+      "peak_wet_area_km2": 3.563,
+      "max_depth_m": 3.852,
+      "peak_frame": 24
+    },
+    {
+      "id": "aep1-coast-early",
+      "label": "1% AEP \u00b7 coast 6 h earlier",
+      "kind": "compound-timing",
+      "peak_wet_area_km2": 3.564,
+      "max_depth_m": 3.852,
+      "peak_frame": 18
+    },
+    {
+      "id": "aep1-coast-late",
+      "label": "1% AEP \u00b7 coast 6 h later",
+      "kind": "compound-timing",
+      "peak_wet_area_km2": 3.564,
+      "max_depth_m": 3.852,
+      "peak_frame": 30
     }
   ]
 }

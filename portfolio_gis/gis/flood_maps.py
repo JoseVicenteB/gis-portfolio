@@ -344,7 +344,8 @@ def _export_web(result: dict, config: dict, sources: dict) -> dict:
             "Educational design scenarios, not live forecasts or official flood maps.",
             "Stage-driven equilibrium surfaces with connected flood spread; no momentum, velocity, or calibrated floodplain storage.",
             "Reduced channel geometry and linear tidal attenuation are assumptions, not surveyed hydraulic structures.",
-            "No dynamic sewer, culvert blockage, groundwater, defence breach, reservoir-operation, wave, or storm-surge model.",
+            "Reservoir routing and compound-event timing are hypothetical sensitivity experiments with prescribed settings, not operator decisions or surge forecasts.",
+            "No calibrated 2D hydrodynamics, dynamic sewer, culvert blockage, groundwater, defence breach, observed reservoir-operation, wave, or storm-surge model.",
             "The 2011 DTM and resampled outputs must not be used for individual property or road-safety decisions.",
         ],
     }

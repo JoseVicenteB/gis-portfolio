@@ -4,6 +4,7 @@
   "kicker": "Cartography / Coordinate systems",
   "summary": "One world, three perspectives. A visual comparison of how map projections reshape geography.",
   "featured": true,
+  "viewer": "projection",
   "date": "2026",
   "tags": ["Cartography", "Python"],
   "hero": "generated/projections/equal-earth.webp",

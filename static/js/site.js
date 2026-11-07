@@ -31,7 +31,7 @@
   window.addEventListener('scroll', updateHeader, { passive: true });
 
   document.querySelectorAll('[data-tabs]').forEach(group => {
-    const tabs = Array.from(group.querySelectorAll('[role="tab"]'));
+    const tabs = Array.from(group.querySelectorAll(':scope > .tab-list > [role="tab"]'));
     const panels = tabs.map(tab => document.getElementById(tab.getAttribute('aria-controls')));
     if (!tabs.length || panels.some(panel => !panel)) return;
 
@@ -63,7 +63,11 @@
 
     const activateHash = () => {
       const matchingTab = tabs.find(tab => `#${tab.getAttribute('aria-controls')}` === window.location.hash);
-      if (matchingTab) activate(matchingTab);
+      if (matchingTab) {
+        activate(matchingTab);
+      } else if (group.querySelector('[data-projection-explorer]') && window.location.hash.startsWith('#projection-')) {
+        activate(tabs.find(tab => tab.getAttribute('aria-controls') === 'maps'));
+      }
     };
     activateHash();
     const selected = tabs.find(tab => tab.getAttribute('aria-selected') === 'true') || tabs[0];

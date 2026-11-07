@@ -109,7 +109,6 @@ def build(base_path: str = "") -> None:
     pages = (
         ("index.html", "index.html", "Home", "GIS and remote sensing projects, reproducible Python workflows, and cartography."),
         ("projects.html", "projects/index.html", "Projects", "Explore GIS, remote sensing, and cartography projects."),
-        ("projections.html", "projections/index.html", "Projection Lab", "An interactive visual guide to map projections and coordinate reference systems."),
         ("about.html", "about/index.html", "About", "About the GIS and remote sensing master's student behind this portfolio."),
         ("contact.html", "contact/index.html", "Contact", "Get in touch about GIS, remote sensing, and spatial analysis."),
     )
@@ -125,15 +124,13 @@ def build(base_path: str = "") -> None:
         output.write_text(html, encoding="utf-8")
 
     project_template = environment.get_template("project.html")
-    for index, project in enumerate(projects):
-        next_project = projects[(index + 1) % len(projects)]
+    for project in projects:
         output = DIST / "projects" / project["slug"] / "index.html"
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(
             project_template.render(
                 **context,
                 project=project,
-                next_project=next_project,
                 page_title=project["title"],
                 page_description=project["summary"],
                 active_page="Projects",

@@ -1,14 +1,21 @@
 <section class="flood-explorer" data-flood-explorer data-assets-url="{{ url('generated/flood') }}" aria-labelledby="flood-explorer-title">
   <div class="section-heading split-heading flood-heading">
     <div><p class="eyebrow">Interactive 3D model</p><h2 id="flood-explorer-title">Watch the water move.</h2></div>
-    <p>Orbit the Lower Liffey, change the design event, and scrub through 48 hours of prescribed river flows and coastal water levels.</p>
+    <p>Orbit the Lower Liffey, compare design events and hypothetical sensitivity experiments, and scrub through 48 hours of prescribed boundary conditions.</p>
   </div>
   <div class="flood-warning"><strong>Simulated scenario—not a live forecast.</strong><span>Do not use this educational model for emergency, property, or road-safety decisions.</span></div>
   <div class="flood-toolbar">
-    <label><span>Design event</span><select data-flood-scenario>
-      <option value="aep10">10% AEP · 10-year</option>
-      <option value="aep1" selected>1% AEP · 100-year</option>
-      <option value="aep01">0.1% AEP · 1,000-year</option>
+    <label><span>Scenario</span><select data-flood-scenario>
+      <optgroup label="Design events">
+        <option value="aep10">10% AEP · 10-year</option>
+        <option value="aep1" selected>1% AEP · 100-year</option>
+        <option value="aep01">0.1% AEP · 1,000-year</option>
+      </optgroup>
+      <optgroup label="Hypothetical experiments">
+        <option value="aep1-reservoir">1% AEP · reservoir routing</option>
+        <option value="aep1-coast-early">1% AEP · coast 6 h earlier</option>
+        <option value="aep1-coast-late">1% AEP · coast 6 h later</option>
+      </optgroup>
     </select></label>
     <div class="flood-layer-options" aria-label="Map layers">
       <label><input type="checkbox" checked data-flood-water-toggle> Flood water</label>
@@ -19,6 +26,7 @@
       <button type="button" data-flood-action="top">Top-down</button>
     </div>
   </div>
+  <p class="flood-scenario-note" data-flood-scenario-note>Baseline 1% AEP design event with prescribed river and coastal peaks at the same scenario hour.</p>
   <div class="flood-layout">
     <div class="flood-map map-frame" data-flood-map>
       <img class="flood-fallback" data-flood-fallback src="{{ url(project.hero) }}" alt="Static map of peak modelled inundation along the Lower Liffey during the 1% AEP scenario" width="1800" height="1080">
@@ -33,6 +41,8 @@
         <div><dt>Connected inundation</dt><dd data-flood-area>—</dd></div>
         <div><dt>Streets above 0.05 m</dt><dd data-flood-roads>—</dd></div>
         <div><dt>Maximum land depth</dt><dd data-flood-depth>—</dd></div>
+        <div data-flood-storage-row hidden><dt>Conceptual reservoir storage</dt><dd data-flood-storage>—</dd></div>
+        <div data-flood-release-row hidden><dt>Conceptual reservoir release</dt><dd data-flood-release>—</dd></div>
       </dl>
       <p class="flood-metric-note">Model outputs for the selected hour. “Affected” indicates modelled water above a threshold, not an observed or official closure.</p>
       <div class="flood-chart-wrap"><span class="note-label">Boundary conditions</span><svg viewBox="0 0 280 110" data-flood-chart role="img" aria-label="Downstream flow and coastal water level over the 48-hour scenario"></svg><div class="flood-chart-legend"><span class="flow">River flow</span><span class="coast">Coastal level</span></div></div>

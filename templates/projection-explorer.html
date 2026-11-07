@@ -1,12 +1,5 @@
-{% extends "base.html" %}
-{% block content %}
-<header class="page-hero projection-hero shell">
-  <p class="eyebrow"><span></span> Projection Lab · EPSG, explained visually</p>
-  <div class="page-hero-grid"><h1>The world changes<br>with its <em>coordinates.</em></h1><p>Every flat map distorts a round Earth. Compare the same boundaries through three projections and see what each choice preserves—and what it changes.</p></div>
-</header>
-
-<section class="section shell projection-lab projection-explorer" aria-labelledby="projection-lab-title" data-projection-explorer>
-  <div class="section-heading projection-heading"><div><p class="eyebrow">Interactive world map</p><h2 id="projection-lab-title">Choose a projection.</h2></div><span class="keyboard-hint">Drag to pan · Scroll to zoom</span></div>
+<section class="projection-explorer" aria-labelledby="projection-explorer-title" data-projection-explorer>
+  <div class="section-heading projection-heading"><div><p class="eyebrow">Interactive world map</p><h2 id="projection-explorer-title">Choose a projection.</h2></div><span class="keyboard-hint">Drag to pan · Scroll to zoom</span></div>
   <div class="tab-list projection-tabs" role="tablist" aria-label="Map projections">
     {% for projection in projections %}<button type="button" role="tab" id="tab-{{ projection.id }}" aria-controls="projection-note-{{ projection.id }}" aria-selected="{{ 'true' if loop.first else 'false' }}" tabindex="{{ '0' if loop.first else '-1' }}" data-projection="{{ projection.id }}"><span>{{ projection.number }}</span>{{ projection.name }}</button>{% endfor %}
   </div>
@@ -40,22 +33,3 @@
   <p class="sr-only" aria-live="polite" data-projection-status></p>
   <script type="application/json" data-projection-config>{{ projections | tojson }}</script>
 </section>
-
-<section class="crs-primer">
-  <div class="shell">
-    <div class="section-heading split-heading"><div><p class="eyebrow light">A quick primer</p><h2>Coordinates need<br>a frame of reference.</h2></div><p>A coordinate reference system tells us where coordinates sit on Earth. A map projection then transforms that curved surface into a flat plane.</p></div>
-    <div class="primer-grid">
-      <article><span>01</span><h3>Geographic CRS</h3><p>Uses latitude and longitude on a model of the Earth. EPSG:4326 is a familiar example, but degrees are not a consistent unit of ground distance.</p><code>53.3498° N, 6.2603° W</code></article>
-      <article><span>02</span><h3>Projected CRS</h3><p>Transforms coordinates to a plane, usually in metres. A local CRS such as UTM zone 29N is suitable for many measurements around Dublin.</p><code>EPSG:32629 · metres</code></article>
-      <article><span>03</span><h3>Fit for purpose</h3><p>There is no universally best projection. Match the CRS to the place, extent, and property that the analysis or map needs to preserve.</p><code>Question → place → property</code></article>
-    </div>
-  </div>
-</section>
-
-<section class="section shell projection-takeaway">
-  <p class="eyebrow">The key takeaway</p>
-  <blockquote>“Which projection should I use?”<br>always starts with <em>“What do you need to preserve?”</em></blockquote>
-  <a class="text-link" href="{{ url('projects/projection-atlas/') }}">See the full cartography project <span aria-hidden="true">→</span></a>
-</section>
-{% endblock %}
-{% block extra_scripts %}<script src="{{ url('js/projection-map.js') }}" defer></script>{% endblock %}

@@ -1,6 +1,6 @@
 # GIS & Remote Sensing Portfolio
 
-A static portfolio generated with Python, Jinja2, and reproducible geospatial workflows. GeoPandas, PyProj, Rasterio, NumPy, SciPy, and Matplotlib create the maps; the published site needs no Python server. The Projection Lab uses a locally bundled D3 renderer, while Dublin Flood Lab uses Three.js to explore precomputed Lower Liffey design-flood scenarios on a 3D terrain mesh.
+A static portfolio generated with Python, Jinja2, and reproducible geospatial workflows. GeoPandas, PyProj, Rasterio, NumPy, SciPy, and Matplotlib create the maps; the published site needs no Python server. The Projection Atlas project uses a locally bundled D3 renderer in its Maps tab, while Dublin Flood Lab uses Three.js to explore precomputed Lower Liffey design-flood scenarios on a 3D terrain mesh.
 
 ## Setup
 
@@ -32,7 +32,7 @@ python -m http.server 8000 --directory dist
 
 Open `http://localhost:8000`. Run `portfolio-maps` locally only when intentionally changing source data, GIS code, or cartography. The first full regeneration downloads Natural Earth data, reads Sentinel-2 cloud-optimized GeoTIFFs, downloads intersecting OPW/GSI LiDAR tiles and technical reports, and extracts Dublin streets and tide predictions. Later runs reuse local inputs cached in `data/raw/`.
 
-To regenerate only the Lower Liffey model and its reviewed assets, run `python -m portfolio_gis.gis.flood_maps`. Scenario inputs and assumptions are recorded in `content/flood-scenarios.json`; output metadata and per-frame summaries are in `static/generated/flood/manifest.json`. Review the maps, terrain coverage, source connectivity, and statistics before accepting regenerated output.
+To regenerate only the Lower Liffey model and its reviewed assets, run `python -m portfolio_gis.gis.flood_maps`. Scenario inputs and assumptions are recorded in `content/flood-scenarios.json`, including the conceptual reservoir-routing and compound-event timing experiments. Output metadata and per-frame summaries are in `static/generated/flood/manifest.json`. Review the maps, terrain coverage, source connectivity, statistics, and reservoir water-balance error before accepting regenerated output.
 
 Review and commit resulting files under `static/generated/` with the related source changes. Deployment never downloads raw GIS data or performs the analysis.
 

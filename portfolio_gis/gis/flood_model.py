@@ -208,6 +208,75 @@ def _normal_depth(flow, width, slope, roughness):
     return np.power((flow * roughness) / (width * np.sqrt(slope)), 0.6)
 
 
+def _design_hydrograph(hours: np.ndarray, config: dict, scenario: dict) -> tuple[np.ndarray, np.ndarray]:
+    fraction_peak = np.power(
+        (hours / config["hydrograph"]["peak_hour"]),
+        config["hydrograph"]["shape"],
+    ) * np.exp(
+        config["hydrograph"]["shape"] * (1 - hours / config["hydrograph"]["peak_hour"])
+    )
+    upstream = config["upstream_node"]["qmed_m3s"] + (
+        scenario["peak_upstream_flow_m3s"] - config["upstream_node"]["qmed_m3s"]
+    ) * fraction_peak
+    downstream = config["downstream_flow_node"]["qmed_m3s"] + (
+        scenario["peak_downstream_flow_m3s"] - config["downstream_flow_node"]["qmed_m3s"]
+    ) * fraction_peak
+    return upstream, downstream
+
+
+def _route_reservoir(inflow: np.ndarray, config: dict) -> tuple[np.ndarray, np.ndarray, dict]:
+    settings = config["reservoir_experiment"]
+    frame_seconds = config["frame_interval_minutes"] * 60
+    substeps = round(frame_seconds / settings["routing_step_seconds"])
+    if substeps < 1 or not np.isclose(substeps * settings["routing_step_seconds"], frame_seconds):
+        raise ValueError("Reservoir routing step must divide the frame interval exactly")
+    dt = settings["routing_step_seconds"]
+    storage = float(settings["initial_storage_m3"])
+    storage_values = np.empty_like(inflow)
+    release_values = np.empty_like(inflow)
+    storage_values[0] = storage
+    total_inflow = 0.0
+    total_release = 0.0
+
+    def prescribed_release(level):
+        return float(np.clip(
+            settings["base_release_m3s"]
+            + (level - settings["target_storage_m3"]) / settings["release_response_seconds"],
+            settings["minimum_release_m3s"],
+            settings["maximum_release_m3s"],
+        ))
+
+    release = prescribed_release(storage)
+    release_values[0] = release
+    for index in range(len(inflow) - 1):
+        for substep in range(substeps):
+            fraction = substep / substeps
+            current_inflow = float(inflow[index] + fraction * (inflow[index + 1] - inflow[index]))
+            next_storage = float(np.clip(
+                storage + (current_inflow - release) * dt,
+                0,
+                settings["storage_capacity_m3"],
+            ))
+            actual_release = current_inflow - (next_storage - storage) / dt
+            total_inflow += current_inflow * dt
+            total_release += actual_release * dt
+            storage = next_storage
+        storage_values[index + 1] = storage
+        release = prescribed_release(storage)
+        release_values[index + 1] = release
+
+    volume_error = abs(
+        settings["initial_storage_m3"] + total_inflow - total_release - storage
+    )
+    if volume_error > 0.01:
+        raise ValueError(f"Reservoir routing water balance failed: {volume_error:.6f} m³")
+    return release_values, storage_values, {
+        **settings,
+        "final_storage_m3": round(storage, 3),
+        "volume_conservation_error_m3": round(volume_error, 6),
+    }
+
+
 def _river_profile(centerline: LineString, terrain: dict, config: dict) -> dict:
     points = _densify(centerline, 10)
     chainage = np.concatenate(([0], np.cumsum(np.linalg.norm(np.diff(points, axis=0), axis=1))))
@@ -322,24 +391,29 @@ def generate_flood_model(sources: dict, config: dict) -> dict:
     output.mkdir(parents=True, exist_ok=True)
     depth_maximum = 8.0
     attenuation = river["fraction"]
+    scenario_definitions = [dict(scenario) for scenario in config["scenarios"]]
+    for experiment in config.get("scenario_experiments", []):
+        base = next(item for item in config["scenarios"] if item["id"] == experiment["base_scenario"])
+        scenario_definitions.append({**base, **experiment})
     scenario_outputs = []
     summary_scenarios = []
-    for scenario in config["scenarios"]:
-        fraction_peak = np.power(
-            (hours / config["hydrograph"]["peak_hour"]),
-            config["hydrograph"]["shape"],
-        ) * np.exp(
-            config["hydrograph"]["shape"] * (1 - hours / config["hydrograph"]["peak_hour"])
-        )
-        upstream_flow = config["upstream_node"]["qmed_m3s"] + (
-            scenario["peak_upstream_flow_m3s"] - config["upstream_node"]["qmed_m3s"]
-        ) * fraction_peak
-        downstream_flow = config["downstream_flow_node"]["qmed_m3s"] + (
-            scenario["peak_downstream_flow_m3s"] - config["downstream_flow_node"]["qmed_m3s"]
-        ) * fraction_peak
-        residual = np.maximum(scenario["coastal_peak_m"] - tide.max(), 0)
-        surge = residual * np.exp(-0.5 * ((hours - config["hydrograph"]["peak_hour"]) / 6) ** 2)
-        coastal = tide + surge
+    for scenario in scenario_definitions:
+        upstream_flow, downstream_flow = _design_hydrograph(hours, config, scenario)
+        reservoir_storage = None
+        reservoir_metadata = None
+        if scenario.get("kind") == "reservoir":
+            design_upstream = upstream_flow.copy()
+            upstream_flow, reservoir_storage, reservoir_metadata = _route_reservoir(upstream_flow, config)
+            downstream_flow = np.maximum(0, downstream_flow + upstream_flow - design_upstream)
+        coastal_peak_hour = config["hydrograph"]["peak_hour"] + scenario.get("coastal_peak_shift_hours", 0)
+        scenario_tide = tide
+        if coastal_peak_hour != config["hydrograph"]["peak_hour"]:
+            scenario_tide, _ = _tide_series(
+                sources["tide"], hours, config["tide"]["period_hours"], coastal_peak_hour
+            )
+        residual = np.maximum(scenario["coastal_peak_m"] - scenario_tide.max(), 0)
+        surge = residual * np.exp(-0.5 * ((hours - coastal_peak_hour) / 6) ** 2)
+        coastal = scenario_tide + surge
         frames = []
         peak_depth = np.zeros_like(terrain["array"], dtype="float32")
         peak_wet = np.zeros_like(terrain["valid"])
@@ -387,30 +461,36 @@ def generate_flood_model(sources: dict, config: dict) -> dict:
             display_depth[display_permanent & (display_depth < 0.1)] = 0.1
             relative = f"depths/{scenario['id']}/{index:02d}.png"
             _save_depth_png(output / relative, display_depth, depth_maximum)
-            frames.append(
-                {
-                    "index": index,
-                    "hour": float(hour),
-                    "file": relative,
-                    "wet_area_km2": round(wet_area, 4),
-                    "affected_road_km": round(affected_length / 1000, 3),
-                    "max_depth_m": round(float(depth[~permanent_water].max(initial=0)), 3),
-                    "upstream_flow_m3s": round(float(upstream_flow[index]), 2),
-                    "downstream_flow_m3s": round(float(downstream_flow[index]), 2),
-                    "coastal_level_m": round(float(coastal[index]), 3),
-                    "road_depths": road_depths,
-                }
-            )
+            frame_record = {
+                "index": index,
+                "hour": float(hour),
+                "file": relative,
+                "wet_area_km2": round(wet_area, 4),
+                "affected_road_km": round(affected_length / 1000, 3),
+                "max_depth_m": round(float(depth[~permanent_water].max(initial=0)), 3),
+                "upstream_flow_m3s": round(float(upstream_flow[index]), 2),
+                "downstream_flow_m3s": round(float(downstream_flow[index]), 2),
+                "coastal_level_m": round(float(coastal[index]), 3),
+                "road_depths": road_depths,
+            }
+            if reservoir_storage is not None:
+                frame_record["reservoir_storage_m3"] = round(float(reservoir_storage[index]), 0)
+                frame_record["reservoir_release_m3s"] = round(float(upstream_flow[index]), 2)
+            frames.append(frame_record)
             np.maximum(peak_depth, depth, out=peak_depth)
             peak_wet |= floodplain_wet
             if wet_area > peak_area:
                 peak_area = wet_area
                 peak_index = index
-        scenario_outputs.append({**scenario, "peak_frame": peak_index, "frames": frames})
+        scenario_output = {**scenario, "peak_frame": peak_index, "frames": frames}
+        if reservoir_metadata:
+            scenario_output["reservoir"] = reservoir_metadata
+        scenario_outputs.append(scenario_output)
         summary_scenarios.append(
             {
                 "id": scenario["id"],
                 "label": scenario["label"],
+                "kind": scenario.get("kind", "design"),
                 "peak_wet_area_km2": round(float(peak_wet.sum() * config["analysis_resolution_m"] ** 2 / 1e6), 3),
                 "max_depth_m": round(float(peak_depth[~permanent_water].max(initial=0)), 3),
                 "peak_frame": peak_index,

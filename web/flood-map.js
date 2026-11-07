@@ -9,6 +9,11 @@ if (explorer) {
   const fallback = explorer.querySelector("[data-flood-fallback]");
   const loading = explorer.querySelector("[data-flood-loading]");
   const scenarioSelect = explorer.querySelector("[data-flood-scenario]");
+  const scenarioNote = explorer.querySelector("[data-flood-scenario-note]");
+  const storageRow = explorer.querySelector("[data-flood-storage-row]");
+  const storageLabel = explorer.querySelector("[data-flood-storage]");
+  const releaseRow = explorer.querySelector("[data-flood-release-row]");
+  const releaseLabel = explorer.querySelector("[data-flood-release]");
   const playButton = explorer.querySelector('[data-flood-action="play"]');
   const timeline = explorer.querySelector("[data-flood-timeline]");
   const timeLabel = explorer.querySelector("[data-flood-time]");
@@ -147,11 +152,20 @@ if (explorer) {
 
   const updateInterface = () => {
     const record = frame();
+    const selected = scenario();
     timeline.value = String(currentFrame);
     timeLabel.textContent = `T+${String(record.hour).padStart(2, "0")}:00`;
     areaLabel.textContent = `${record.wet_area_km2.toFixed(2)} km²`;
     roadsLabel.textContent = `${record.affected_road_km.toFixed(1)} km`;
     depthLabel.textContent = `${record.max_depth_m.toFixed(2)} m`;
+    scenarioNote.textContent = selected.description || `Baseline ${selected.label} design event with prescribed river and coastal peaks at the same scenario hour.`;
+    const reservoir = selected.kind === "reservoir";
+    storageRow.hidden = !reservoir;
+    releaseRow.hidden = !reservoir;
+    if (reservoir) {
+      storageLabel.textContent = `${(record.reservoir_storage_m3 / 1000000).toFixed(2)} million m³`;
+      releaseLabel.textContent = `${record.reservoir_release_m3s.toFixed(1)} m³/s`;
+    }
     const marker = chart.querySelector("[data-flood-chart-marker]");
     if (marker) {
       const x = 30 + record.hour / 48 * 232;
@@ -364,7 +378,7 @@ if (explorer) {
     currentFrame = Math.min(currentFrame, scenario().frames.length - 1);
     drawChart();
     await setFrame(currentFrame);
-    announce(`${scenario().label} selected, approximately 1 in ${scenario().return_period_years} annual exceedance probability.`);
+    announce(`${scenario().label} selected. ${scenario().description || `Approximately 1 in ${scenario().return_period_years} annual exceedance probability.`}`);
   });
   playButton.addEventListener("click", () => {
     if (!playing && currentFrame === scenario().frames.length - 1) setFrame(0);

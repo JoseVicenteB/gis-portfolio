@@ -1,5 +1,5 @@
 {
-  "model_version": "1.0.0",
+  "model_version": "1.1.0",
   "study_bounds_itm": [712000, 731500, 722000, 737500],
   "analysis_resolution_m": 5,
   "display_resolution_m": 20,
@@ -71,6 +71,42 @@
       "peak_upstream_flow_m3s": 273.89,
       "peak_downstream_flow_m3s": 338.01,
       "coastal_peak_m": 3.34
+    }
+  ],
+  "reservoir_experiment": {
+    "storage_capacity_m3": 30000000,
+    "initial_storage_m3": 12000000,
+    "target_storage_m3": 18000000,
+    "base_release_m3s": 107.45,
+    "minimum_release_m3s": 60,
+    "maximum_release_m3s": 180,
+    "release_response_seconds": 21600,
+    "routing_step_seconds": 300,
+    "note": "A conceptual linear storage-release rule routes the existing 1% AEP upstream design hydrograph. These are hypothetical dimensions and settings, not ESB reservoir data or operating rules."
+  },
+  "scenario_experiments": [
+    {
+      "id": "aep1-reservoir",
+      "base_scenario": "aep1",
+      "kind": "reservoir",
+      "label": "1% AEP · reservoir routing",
+      "description": "Hypothetical reservoir storage and release rules modify the existing 1% AEP upstream hydrograph. This is a volume-conserving sensitivity experiment, not an ESB operating scenario."
+    },
+    {
+      "id": "aep1-coast-early",
+      "base_scenario": "aep1",
+      "kind": "compound-timing",
+      "label": "1% AEP · coast 6 h earlier",
+      "coastal_peak_shift_hours": -6,
+      "description": "The prescribed 1% AEP coastal peak occurs six hours before the river peak. This isolates compound-event timing sensitivity; it is not an observed or forecast surge event."
+    },
+    {
+      "id": "aep1-coast-late",
+      "base_scenario": "aep1",
+      "kind": "compound-timing",
+      "label": "1% AEP · coast 6 h later",
+      "coastal_peak_shift_hours": 6,
+      "description": "The prescribed 1% AEP coastal peak occurs six hours after the river peak. This isolates compound-event timing sensitivity; it is not an observed or forecast surge event."
     }
   ]
 }
