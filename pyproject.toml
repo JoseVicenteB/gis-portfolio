@@ -9,7 +9,6 @@ description = "A reproducible GIS and remote sensing portfolio"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-  "geopandas>=1.0,<2",
   "shapely>=2.0,<3",
   "pyproj>=3.6,<4",
   "rasterio>=1.3,<2",

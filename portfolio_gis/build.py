@@ -44,21 +44,7 @@ def load_projects() -> list[dict]:
 
 def add_statistics(projects: list[dict]) -> None:
     for project in projects:
-        if project["slug"] == "dublin-ndvi":
-            summary = load_json(STATIC / "generated" / "ndvi" / "summary.json")
-            project["stats"] = [
-                {"value": f'{summary["median_ndvi"]:.2f}', "label": "Median NDVI"},
-                {"value": f'{summary["valid_percentage"]:.1f}%', "label": "Valid observations"},
-                {"value": f'{summary["vegetated_percentage"]:.1f}%', "label": "Pixels with NDVI ≥ 0.4"},
-            ]
-        elif project["slug"] == "projection-atlas":
-            summary = load_json(STATIC / "generated" / "projections" / "summary.json")
-            project["stats"] = [
-                {"value": str(summary["projection_count"]), "label": "Projections compared"},
-                {"value": str(summary["country_count"]), "label": "Country boundaries"},
-                {"value": "1", "label": "Shared source dataset"},
-            ]
-        elif project["slug"] == "dublin-liffey-flood":
+        if project["slug"] == "dublin-liffey-flood":
             summary = load_json(STATIC / "generated" / "flood" / "summary.json")
             project["stats"] = [
                 {"value": f'{summary["default_peak_wet_area_km2"]:.2f} km²', "label": "Peak connected land inundation · 1% AEP"},
@@ -92,12 +78,10 @@ def build(base_path: str = "") -> None:
     site = load_json(CONTENT / "site.json")
     projects = load_projects()
     add_statistics(projects)
-    projections = load_json(CONTENT / "projections.json")
     context = {
         "site": site,
         "projects": projects,
         "featured": [project for project in projects if project.get("featured")],
-        "projections": projections,
         "tag_counts": {tag: sum(tag in project["tags"] for project in projects) for tag in ("Remote Sensing", "Cartography", "Python")},
         "year": datetime.now().year,
     }

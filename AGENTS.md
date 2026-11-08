@@ -15,7 +15,7 @@ This portfolio deploys **precomputed GIS web assets**. Routine deployments must 
 
 Run `portfolio-maps` locally only when source data, GIS code, cartography, or map content intentionally changes. Review the generated media and statistics, then commit the updated files under `static/generated/` together with the corresponding code/content changes. Preserve dataset attribution and limitations.
 
-For content-only changes, run `portfolio-build` without regenerating maps. For changes to `web/projection-map.js` or `web/flood-map.js`, run `npm ci` once if needed and `npm run build`; keep the bundled outputs in `static/js/` with the site.
+For content-only changes, run `portfolio-build` without regenerating maps. For changes to `web/flood-map.js`, run `npm ci` once if needed and `npm run build`; keep the bundled output in `static/js/` with the site.
 
 For flood-only source, scenario, model, or cartography changes, run `python -m portfolio_gis.gis.flood_maps` locally. Scenario parameters and assumptions live in `content/flood-scenarios.json`; inspect `static/generated/flood/manifest.json`, all scenario maps, and frame statistics. Do not copy restricted CFRAM/NIFM extent/depth layers into the site. The published viewer must continue to use local precomputed assets and show its educational-use limitations.
 

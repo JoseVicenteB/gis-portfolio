@@ -24,13 +24,12 @@
       </div>
       <aside class="outcome-card"><span class="note-label">What this shows</span><p>{{ project.outcome }}</p><div class="tool-list">{% for tool in project.tools %}<span>{{ tool }}</span>{% endfor %}</div></aside>
       <div class="stats-row">{% for stat in project.stats %}<div><strong>{{ stat.value }}</strong><span>{{ stat.label }}</span></div>{% endfor %}</div>
-      {% if project.get('method_note') %}<p class="method-note">{{ project.method_note }}</p>{% elif project.slug == 'dublin-ndvi' %}<p class="method-note">These figures summarize valid pixels in this demonstration window. NDVI ≥ 0.4 is a descriptive threshold, not a validated land-cover classification.</p>{% endif %}
+      {% if project.get('method_note') %}<p class="method-note">{{ project.method_note }}</p>{% endif %}
     </section>
 
     <section class="tab-panel maps-panel" id="maps" role="tabpanel" aria-labelledby="tab-maps" tabindex="0">
       <div class="section-heading"><p class="eyebrow">Cartographic outputs</p><h2>Explore the maps.</h2></div>
       {% if project.get('viewer') == 'flood' %}{% include "flood-explorer.html" %}{% endif %}
-      {% if project.get('viewer') == 'projection' %}{% include "projection-explorer.html" %}{% endif %}
       {% for map in project.maps %}
       <figure class="project-map" id="{{ map.id }}">
         <div class="map-frame"><img src="{{ url(map.image) }}" srcset="{{ srcset(map.image) }}" sizes="(max-width: 900px) 92vw, 80vw" alt="{{ map.alt }}" loading="lazy" width="1600" height="1100"><button class="map-expand" type="button" data-map-expand data-full="{{ url(map.image) }}" data-alt="{{ map.alt }}" data-caption="{{ map.title }} · {{ map.crs }}">View full map <span aria-hidden="true">↗</span></button></div>
@@ -42,7 +41,7 @@
     <section class="tab-panel methods-panel" id="methods" role="tabpanel" aria-labelledby="tab-methods" tabindex="0">
       <div class="section-heading split-heading"><div><p class="eyebrow">From input to insight</p><h2>A reproducible<br>workflow.</h2></div><p>The analysis is scripted rather than hidden in a sequence of manual steps. Inputs, transformations, and exports can be inspected and repeated.</p></div>
       <ol class="method-list">{% for method in project.methods %}<li><span>0{{ loop.index }}</span><div><h3>{{ method.title }}</h3><p>{{ method.text }}</p></div></li>{% endfor %}</ol>
-      <div class="formula-card">{% if project.get('formula') %}<span class="note-label">{{ project.formula_label }}</span><strong>{{ project.formula }}</strong><p>{{ project.formula_text }}</p>{% elif project.slug == 'dublin-ndvi' %}<span class="note-label">Band calculation</span><strong>NDVI = (B08 − B04) / (B08 + B04)</strong><p>B08 is the near-infrared band; B04 is red. Both use the same 10 m source grid.</p>{% else %}<span class="note-label">Core transformation</span><strong>(λ, φ) → projected (x, y)</strong><p>PyProj definitions ensure each output geometry has an explicit, documented target CRS.</p>{% endif %}</div>
+      {% if project.get('formula') %}<div class="formula-card"><span class="note-label">{{ project.formula_label }}</span><strong>{{ project.formula }}</strong><p>{{ project.formula_text }}</p></div>{% endif %}
       {% if project.get('implemented_experiments') %}<div class="future-work implemented-work"><div class="section-heading"><p class="eyebrow">Implemented experiments</p><h2>Explore the sensitivity.</h2><p>These free, precomputed what-if scenarios use the existing open inputs and explicit hypothetical settings. Select them in the Maps tab; they are not operational forecasts.</p></div><div class="future-grid">{% for item in project.implemented_experiments %}<article><span>0{{ loop.index }}</span><h3>{{ item.title }}</h3><p>{{ item.text }}</p></article>{% endfor %}</div></div>{% endif %}
       {% if project.get('future_implementations') %}<div class="future-work"><div class="section-heading"><p class="eyebrow">Future implementations</p><h2>Where the model could go next.</h2><p>These extensions require additional data, solver development, and validation. They are not represented as current capabilities.</p></div><div class="future-grid">{% for item in project.future_implementations %}<article><span>0{{ loop.index }}</span><h3>{{ item.title }}</h3><p>{{ item.text }}</p></article>{% endfor %}</div></div>{% endif %}
     </section>
@@ -50,10 +49,9 @@
     <section class="tab-panel data-panel" id="data" role="tabpanel" aria-labelledby="tab-data" tabindex="0">
       <div class="section-heading split-heading"><div><p class="eyebrow">Sources &amp; limitations</p><h2>Know what’s<br>behind the map.</h2></div><p>Open data makes the workflow inspectable. Resolution, acquisition conditions, and processing choices still shape what the output can meaningfully show.</p></div>
       <div class="data-list">{% for dataset in project.data %}<article><div><span class="note-label">Dataset</span><h3>{{ dataset.name }}</h3></div><dl><div><dt>Provider</dt><dd>{{ dataset.provider }}</dd></div><div><dt>Details</dt><dd>{{ dataset.details }}</dd></div><div><dt>License</dt><dd>{{ dataset.license }}</dd></div></dl><a class="text-link" href="{{ dataset.url }}" target="_blank" rel="noopener noreferrer">View source record <span aria-hidden="true">↗</span></a></article>{% endfor %}</div>
-      {% if project.slug == 'dublin-ndvi' %}<p><a class="button button-outline" href="{{ url('generated/ndvi/dublin-ndvi.tif') }}" download>Download processed NDVI <span>GeoTIFF · 13 MB ↓</span></a></p>{% endif %}
-      {% if project.get('caveat') %}<div class="data-caveat"><strong>{{ project.caveat_title }}</strong><p>{{ project.caveat }}</p></div>{% elif project.slug == 'dublin-ndvi' %}<div class="data-caveat"><strong>Interpret with care.</strong><p>NDVI is an index, not a direct measurement of biomass or land cover. Atmospheric effects, surface materials, mixed pixels, and classification errors can influence values. The scene-level cloud-cover percentage does not describe the crop exactly.</p></div>{% else %}<div class="data-caveat"><strong>Small-scale data.</strong><p>The 1:110m boundaries are intended for world and regional overview maps. They should not be used for precise local measurement or boundary interpretation.</p></div>{% endif %}
+      {% if project.get('caveat') %}<div class="data-caveat"><strong>{{ project.caveat_title }}</strong><p>{{ project.caveat }}</p></div>{% endif %}
     </section>
   </div>
 </article>
 {% endblock %}
-{% block extra_scripts %}{% if project.get('viewer') == 'flood' %}<script src="{{ url('js/flood-map.js') }}" defer></script>{% elif project.get('viewer') == 'projection' %}<script src="{{ url('js/projection-map.js') }}" defer></script>{% endif %}{% endblock %}
+{% block extra_scripts %}{% if project.get('viewer') == 'flood' %}<script src="{{ url('js/flood-map.js') }}" defer></script>{% endif %}{% endblock %}

@@ -10,8 +10,8 @@
     <h2 class="sr-only" id="archive-title">All projects</h2>
     <div class="filter-list" aria-label="Filter projects by theme" data-filters>
       <button type="button" data-filter="All" aria-pressed="true">All <span>{{ projects|length }}</span></button>
-      {% for tag in ['Remote Sensing', 'Cartography', 'Python'] %}
-      <button type="button" data-filter="{{ tag }}" aria-pressed="false">{{ tag }} <span>{{ tag_counts[tag] }}</span></button>
+      {% for tag, count in tag_counts.items() if count %}
+      <button type="button" data-filter="{{ tag }}" aria-pressed="false">{{ tag }} <span>{{ count }}</span></button>
       {% endfor %}
     </div>
     <p class="archive-count" aria-live="polite" data-filter-count>{{ projects|length }} projects</p>

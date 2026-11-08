@@ -65,8 +65,6 @@
       const matchingTab = tabs.find(tab => `#${tab.getAttribute('aria-controls')}` === window.location.hash);
       if (matchingTab) {
         activate(matchingTab);
-      } else if (group.querySelector('[data-projection-explorer]') && window.location.hash.startsWith('#projection-')) {
-        activate(tabs.find(tab => tab.getAttribute('aria-controls') === 'maps'));
       }
     };
     activateHash();
