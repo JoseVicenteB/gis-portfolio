@@ -91,9 +91,8 @@ def build(base_path: str = "") -> None:
     shutil.copytree(STATIC, DIST)
 
     pages = (
-        ("index.html", "index.html", "Home", "GIS and remote sensing projects, reproducible Python workflows, and cartography."),
+        ("about.html", "index.html", "About", "About the GIS and remote sensing master's student behind this portfolio."),
         ("projects.html", "projects/index.html", "Projects", "Explore GIS, remote sensing, and cartography projects."),
-        ("about.html", "about/index.html", "About", "About the GIS and remote sensing master's student behind this portfolio."),
         ("contact.html", "contact/index.html", "Contact", "Get in touch about GIS, remote sensing, and spatial analysis."),
     )
     for template_name, output_name, title, description in pages:

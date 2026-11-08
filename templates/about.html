@@ -2,7 +2,8 @@
 {% block content %}
 <header class="page-hero about-hero shell">
   <p class="eyebrow"><span></span> About me</p>
-  <div class="page-hero-grid"><h1>Curious about place.<br><em>Precise with data.</em></h1><p>{{ site.bio }}</p></div>
+  <div class="page-hero-grid"><h1>Curious about place.<br><em>Precise with data.</em></h1><p>{{ site.intro }} {{ site.bio }}</p></div>
+  <div class="hero-meta"><span>Based in Dublin, Ireland</span><span>MSc GIS &amp; Remote Sensing</span></div>
 </header>
 
 <section class="shell about-profile">
@@ -14,6 +15,17 @@
     <span class="profile-caption">DUBLIN, IRELAND<br>53.3498° N / 6.2603° W</span>
   </div>
   <div class="profile-copy"><p class="eyebrow">My perspective</p><h2>Geography is both<br>a lens and a method.</h2><p>My master’s studies are building a foundation in GIS, remote sensing, and spatial data science. I’m especially interested in the point where rigorous processing becomes a clear visual explanation.</p><p>This site documents that learning process. The demonstrations are intentionally transparent about their inputs and limits; as my coursework develops, the portfolio will grow to include new analyses, research questions, and places.</p><div class="education-card"><span class="note-label">Current studies</span><h3>MSc GIS &amp; Remote Sensing</h3><p>University College Dublin</p><span>Master’s studies · Ireland</span></div></div>
+</section>
+
+<section class="approach-section">
+  <div class="shell approach-grid">
+    <div class="approach-intro"><p class="eyebrow light">My approach</p><h2>Good maps start<br>with good questions.</h2><p>I care about the full path from raw data to visual story: choosing suitable inputs, understanding their limits, and making the result legible.</p></div>
+    <ol class="approach-list">
+      <li><span>01</span><div><h3>Observe</h3><p>Start with a place, a question, and data whose resolution and provenance fit the task.</p></div></li>
+      <li><span>02</span><div><h3>Analyze</h3><p>Build transparent spatial workflows in Python, with explicit CRS handling and documented decisions.</p></div></li>
+      <li><span>03</span><div><h3>Communicate</h3><p>Use cartography to reveal the pattern without hiding uncertainty or overstating the result.</p></div></li>
+    </ol>
+  </div>
 </section>
 
 <section class="section shell toolkit-section">

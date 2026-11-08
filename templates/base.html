@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page_title == 'Home' %}{{ site.name }} — {{ site.role }}{% else %}{{ page_title }} — {{ site.name }}{% endif %}</title>
+  <title>{{ page_title }} — {{ site.name }}</title>
   <meta name="description" content="{{ page_description }}">
   <meta name="theme-color" content="#173f36">
   <meta property="og:type" content="website">
@@ -30,7 +30,7 @@
       </button>
       <nav class="site-nav" id="site-nav" aria-label="Main navigation" data-nav>
         <a href="{{ url('projects/') }}" {% if active_page == 'Projects' %}aria-current="page"{% endif %}>Projects</a>
-        <a href="{{ url('about/') }}" {% if active_page == 'About' %}aria-current="page"{% endif %}>About</a>
+        <a href="{{ url('') }}" {% if active_page == 'About' %}aria-current="page"{% endif %}>About</a>
         <a class="nav-contact" href="{{ url('contact/') }}" {% if active_page == 'Contact' %}aria-current="page"{% endif %}>Let’s talk <span aria-hidden="true">↗</span></a>
       </nav>
     </div>
@@ -47,7 +47,7 @@
         <p>Exploring place, pattern, and change<br>through spatial data.</p>
       </div>
       <div class="footer-links">
-        <div><span class="footer-label">Explore</span><a href="{{ url('projects/') }}">Projects</a><a href="{{ url('about/') }}">About</a></div>
+        <div><span class="footer-label">Explore</span><a href="{{ url('projects/') }}">Projects</a><a href="{{ url('') }}">About</a></div>
         <div><span class="footer-label">Connect</span><a href="{{ url('contact/') }}">Contact</a>{% if site.github %}<a href="{{ site.github }}" rel="me">GitHub</a>{% endif %}{% if site.linkedin %}<a href="{{ site.linkedin }}" rel="me">LinkedIn</a>{% endif %}</div>
       </div>
     </div>

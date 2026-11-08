@@ -167,10 +167,8 @@ h1 em, h2 em, blockquote em { color: var(--green-soft); font-weight: 400; }
 .archive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .archive-grid .project-image { height: 440px; }
 .empty-state { padding: 50px; text-align: center; color: var(--muted); border: 1px solid var(--line); }
-.archive-note { display: grid; grid-template-columns: .65fr 1.35fr; gap: 50px; margin-bottom: 120px; padding: 60px; background: var(--paper-deep); }
-.archive-note > div { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 45px; }
-.archive-note h2 { font-size: 40px; }
-.archive-note > div > p { margin: 0; color: var(--muted); font-size: 13px; }
+.archive-note { margin-bottom: 120px; padding: 90px 60px; background: var(--paper-deep); text-align: center; }
+.archive-note h2 { font-size: clamp(64px, 9vw, 120px); line-height: .95; }
 
 .tab-list { display: none; }
 .js .tab-list { display: flex; }
@@ -278,7 +276,6 @@ h1 em, h2 em, blockquote em { color: var(--green-soft); font-weight: 400; }
   .hero-copy h1 { font-size: 60px; }
   .project-image, .featured-grid .project-card-2 .project-image, .archive-grid .project-image { height: 340px; }
   .approach-grid { gap: 60px; }
-  .archive-note { grid-template-columns: 1fr; }
   .about-profile { gap: 55px; }
   .profile-graphic { min-height: 490px; }
   .contact-page { gap: 70px; }
@@ -321,7 +318,6 @@ h1 em, h2 em, blockquote em { color: var(--green-soft); font-weight: 400; }
   .footer-links { gap: 55px; }
   .page-hero { padding-block: 75px 60px; }
   .page-hero h1 { font-size: clamp(53px, 11vw, 76px); }
-  .archive-note > div { grid-template-columns: 1fr; }
   .project-header { padding-top: 30px; }
   .breadcrumbs { margin-bottom: 45px; }
   .project-title-grid h1 { font-size: clamp(54px, 12vw, 80px); }
