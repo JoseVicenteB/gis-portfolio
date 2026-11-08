@@ -30,31 +30,6 @@
   </div>
 </section>
 
-<section class="section shell" id="selected-work">
-  <div class="section-heading split-heading">
-    <div><p class="eyebrow">Selected work</p><h2>Spatial questions,<br>visual answers.</h2></div>
-    <p>From satellite imagery to coordinate systems, each project pairs a clear geographic question with a transparent, reproducible workflow.</p>
-  </div>
-  <div class="project-grid featured-grid">
-    {% for project in featured %}
-    <article class="project-card project-card-{{ loop.index }}">
-      <a class="project-image map-frame" href="{{ url('projects/' + project.slug + '/') }}" aria-label="View {{ project.title }}">
-        <img src="{{ url(project.hero) }}" srcset="{{ srcset(project.hero) }}" sizes="(max-width: 700px) 92vw, 55vw" alt="{{ project.hero_alt }}" loading="lazy" width="1600" height="1100">
-        <span class="image-index">0{{ loop.index }}</span>
-        <span class="image-arrow" aria-hidden="true">↗</span>
-      </a>
-      <div class="project-card-body">
-        <div class="tag-row">{% for tag in project.tags %}<span>{{ tag }}</span>{% endfor %}<time>{{ project.date }}</time></div>
-        <h3><a href="{{ url('projects/' + project.slug + '/') }}">{{ project.title }}</a></h3>
-        <p>{{ project.summary }}</p>
-        <a class="project-link" href="{{ url('projects/' + project.slug + '/') }}">View case study <span aria-hidden="true">→</span></a>
-      </div>
-    </article>
-    {% endfor %}
-  </div>
-  <a class="button button-outline section-button" href="{{ url('projects/') }}">Browse all projects <span aria-hidden="true">↗</span></a>
-</section>
-
 <section class="approach-section">
   <div class="shell approach-grid">
     <div class="approach-intro"><p class="eyebrow light">My approach</p><h2>Good maps start<br>with good questions.</h2><p>I care about the full path from raw data to visual story: choosing suitable inputs, understanding their limits, and making the result legible.</p></div>
@@ -74,7 +49,7 @@
 </section>
 
 <section class="shell home-cta">
-  <div><p class="eyebrow">Next step</p><h2>Interested in working<br>with spatial data?</h2></div>
+  <div><p class="eyebrow">Next step</p><h2>Interested in working<br>with me?</h2></div>
   <a class="circle-link" href="{{ url('contact/') }}" aria-label="Get in touch"><span>Let’s talk</span><b aria-hidden="true">↗</b></a>
 </section>
 {% endblock %}
