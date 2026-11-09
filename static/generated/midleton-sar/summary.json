@@ -1,0 +1,40 @@
+{
+  "slug": "midleton-sar-flood",
+  "title": "Midleton SAR Flood Response",
+  "subtitle": "Storm Babet · 18 October 2023 · Sentinel-1 and rainfall radar",
+  "event": "Storm Babet — Midleton, County Cork",
+  "event_date": "2023-10-18",
+  "sar_event_scene": "S1A_IW_GRDH_1SDV_20231018T181500_20231018T181525_050823_06201F_04AE",
+  "sar_baseline_scenes": [
+    "S1A_IW_GRDH_1SDV_20231006T181500_20231006T181525_050648_061A18_D169",
+    "S1A_IW_GRDH_1SDV_20230924T181500_20230924T181525_050473_06141A_1C75",
+    "S1A_IW_GRDH_1SDV_20230819T181459_20230819T181524_049948_06022D_9043"
+  ],
+  "sar_acquisition_utc": "2023-10-18T18:15:00Z",
+  "detected_area_km2": 3.4089,
+  "candidate_area_km2": 3.8994,
+  "retained_region_count": 803,
+  "radar_hours": 42,
+  "radar_missing_hours": 0,
+  "radar_aoi_mean_mm": 33.122825622558594,
+  "radar_aoi_max_mm": 53.89319610595703,
+  "radar_peak_1h_max_mm": 6.252541542053223,
+  "validation_status": "Qualitative evaluation — no independent open reference extent",
+  "precision": null,
+  "recall": null,
+  "iou": null,
+  "snap_scene_processing_seconds": 101.84266810002737,
+  "snap_scenes_timed": 4,
+  "runtime_note": "Sum of measured SNAP graph runs for the four primary scenes; excludes downloads, compatibility conversion, Python post-processing and cartography.",
+  "tools": [
+    "ESA SNAP 14",
+    "Python 3.11",
+    "Rasterio",
+    "GeoPandas",
+    "QGIS",
+    "Leaflet"
+  ],
+  "method_version": "0.1.0",
+  "video_url": null,
+  "caveat": "Historical receding-stage SAR snapshot. Not maximum flood extent, flood depth, an official map, or a live emergency product."
+}

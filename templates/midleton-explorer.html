@@ -1,0 +1,23 @@
+<section class="midleton-explorer" data-midleton-explorer data-assets-url="{{ url('generated/midleton-sar') }}" aria-labelledby="midleton-explorer-title">
+  <div class="section-heading split-heading midleton-heading">
+    <div><p class="eyebrow">Interactive historical response map</p><h2 id="midleton-explorer-title">Interrogate the evidence.</h2></div>
+    <p>Switch between calibrated SAR, backscatter change, terrain, rainfall, cleaned detections, and qualitative review layers. Every asset is precomputed and served with this site.</p>
+  </div>
+  <div class="flood-warning midleton-warning"><strong>Qualitative evaluation — no independent open reference extent</strong><span>Precision, recall, and IoU are not claimed. This receding-stage snapshot is not maximum inundation, flood depth, or an official warning product.</span></div>
+  <div class="midleton-layout">
+    <div class="midleton-map map-frame" data-midleton-map-frame>
+      <img class="midleton-fallback" data-midleton-fallback src="{{ url(project.hero) }}" alt="Static map of detected new inundation around Midleton during the receding stage of Storm Babet" width="2132" height="1414">
+      <div class="midleton-map-canvas" data-midleton-map role="application" aria-label="Interactive Midleton map with SAR, rainfall, inundation, catchment, road, and qualitative review layers"></div>
+      <p class="midleton-loading" data-midleton-loading>Loading reviewed map layers…</p>
+    </div>
+    <aside class="midleton-dashboard" aria-label="Midleton event summary">
+      <div class="midleton-acquisition"><span class="note-label">Sentinel-1A acquisition</span><strong>18 Oct 2023</strong><span>18:15 UTC · ascending orbit 1</span></div>
+      <dl class="midleton-metrics">{% for stat in project.stats %}<div><dt>{{ stat.label }}</dt><dd>{{ stat.value }}</dd></div>{% endfor %}</dl>
+      <p class="midleton-metric-note">Detected new inundation after permanent-water, slope, geometry, layover/shadow, and small-region exclusions. Radar statistics describe accumulated precipitation, not flood depth.</p>
+      <div class="midleton-downloads"><span class="note-label">Downloads &amp; evidence</span><a class="button button-primary" href="{{ url('generated/midleton-sar/midleton_sar_flood.gpkg') }}" download>GeoPackage <span aria-hidden="true">↓</span></a><a class="button button-outline" href="{{ url('generated/midleton-sar/midleton_babet_event_card.pdf') }}" download>Event card PDF <span aria-hidden="true">↓</span></a></div>
+      <p class="midleton-instructions">Use the layer control to compare evidence. Select a polygon or road for attributes and units. Scroll or pinch to zoom; drag to pan.</p>
+    </aside>
+  </div>
+  <p class="midleton-attribution">Copernicus Sentinel-1 · Met Éireann radar (CC BY 4.0) · GSI/OPW LiDAR (CC BY 4.0) with Copernicus GLO-30 gap filling · EPA WFD Cycle 3 (CC BY 4.0) · © OpenStreetMap contributors (ODbL). Precomputed historical analysis; no live data or GIS-server calls.</p>
+  <p class="sr-only" aria-live="polite" data-midleton-status></p>
+</section>

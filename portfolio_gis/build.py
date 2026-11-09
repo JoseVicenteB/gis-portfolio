@@ -30,6 +30,8 @@ def load_projects() -> list[dict]:
         for image in [project["hero"], *(item["image"] for item in project["maps"])]:
             if not STATIC.joinpath(image).is_file():
                 raise FileNotFoundError(f"Generate the required map first: static/{image}")
+        if project.get("stats_source") and not STATIC.joinpath(project["stats_source"]).is_file():
+            raise FileNotFoundError(f"Missing project statistics source: static/{project['stats_source']}")
         if project.get("viewer") == "flood":
             for asset in ("manifest.json", "summary.json", "terrain.bin", "terrain.webp", "streets.geojson"):
                 if not STATIC.joinpath("generated", "flood", asset).is_file():
@@ -44,7 +46,24 @@ def load_projects() -> list[dict]:
 
 def add_statistics(projects: list[dict]) -> None:
     for project in projects:
-        if project["slug"] == "dublin-liffey-flood":
+        if project.get("stats_source"):
+            summary = load_json(STATIC / project["stats_source"])
+            definitions = project.get("stats", [])
+            if not definitions:
+                raise ValueError(f"{project['slug']} declares stats_source but no statistics")
+            statistics = []
+            for definition in definitions:
+                missing = {"key", "label"} - definition.keys()
+                if missing:
+                    raise ValueError(f"{project['slug']} statistic is missing: {', '.join(sorted(missing))}")
+                key = definition["key"]
+                if key not in summary:
+                    raise ValueError(f"{project['slug']} statistics source is missing: {key}")
+                value = summary[key]
+                formatted = format(value, definition["format"]) if definition.get("format") else str(value)
+                statistics.append({"value": f"{formatted}{definition.get('suffix', '')}", "label": definition["label"]})
+            project["stats"] = statistics
+        elif project["slug"] == "dublin-liffey-flood":
             summary = load_json(STATIC / "generated" / "flood" / "summary.json")
             project["stats"] = [
                 {"value": f'{summary["default_peak_wet_area_km2"]:.2f} km²', "label": "Peak connected land inundation · 1% AEP"},
@@ -66,7 +85,7 @@ def build(base_path: str = "") -> None:
         preview = source.with_name(f"{source.stem}-960{source.suffix}")
         if not STATIC.joinpath(preview).is_file():
             return url(path)
-        return f"{url(str(preview))} 960w, {url(path)} 1800w"
+        return f"{url(preview.as_posix())} 960w, {url(path)} 1800w"
 
     environment = Environment(
         loader=FileSystemLoader(TEMPLATES),

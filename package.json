@@ -4,9 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "esbuild web/flood-map.js --bundle --minify --format=iife --outdir=static/js"
+    "build": "esbuild web/flood-map.js web/midleton-map.js --bundle --minify --format=iife --loader:.png=dataurl --outdir=static/js"
   },
   "dependencies": {
+    "leaflet": "^1.9.4",
     "three": "^0.180.0"
   },
   "devDependencies": {

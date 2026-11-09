@@ -1,0 +1,20 @@
+{
+  "map_loaded": true,
+  "eight_overlay_toggles": true,
+  "rainfall_toggle": true,
+  "four_base_layers": true,
+  "sar_event_toggle": true,
+  "popup_has_area": true,
+  "geopackage_download": {
+    "name": "midleton_sar_flood.gpkg",
+    "bytes": 5459968
+  },
+  "event_card_download": {
+    "name": "midleton_babet_event_card.pdf",
+    "bytes": 368276
+  },
+  "mobile_no_horizontal_overflow": true,
+  "mobile_layers_collapsed": true,
+  "console_errors": [],
+  "http_errors": []
+}

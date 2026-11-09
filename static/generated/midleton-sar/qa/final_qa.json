@@ -1,0 +1,131 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "four_catalogued_scenes",
+      "passed": true,
+      "details": 4
+    },
+    {
+      "name": "same_sensor_orbit_pass",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "vv_vh_available",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "safe_products_complete",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "analysis_rasters_aligned",
+      "passed": true,
+      "details": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "speckle_precedes_terrain_correction",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "filtered_event_differs_from_unfiltered_control",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "lee_3_and_5_windows_differ",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "radar_complete_42_hours",
+      "passed": true,
+      "details": {
+        "available": 42,
+        "missing": []
+      }
+    },
+    {
+      "name": "terrain_coverage",
+      "passed": true,
+      "details": 1.0
+    },
+    {
+      "name": "terrain_sources_documented",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "qualitative_validation_has_no_fake_metrics",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "geopackage_layers_present",
+      "passed": true,
+      "details": [
+        "study_area",
+        "scene_footprints",
+        "flood_candidates",
+        "flood_extent",
+        "permanent_water",
+        "exclusion_masks",
+        "rainfall_subcatchment_stats",
+        "error_analysis"
+      ]
+    },
+    {
+      "name": "geopackage_crs",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "geopackage_valid_geometry",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "vector_raster_area_consistent",
+      "passed": true,
+      "details": {
+        "vector_km2": 3.4089,
+        "raster_km2": 3.4089
+      }
+    },
+    {
+      "name": "map_formats_complete",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "event_card_formats_complete",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "web_package_complete",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "qgis_project_present",
+      "passed": true,
+      "details": "XML/package integrity is checked separately; interactive QGIS verification requires QGIS"
+    }
+  ],
+  "passed_count": 20,
+  "check_count": 20
+}

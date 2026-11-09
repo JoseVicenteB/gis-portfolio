@@ -1,0 +1,113 @@
+{
+  "slug": "midleton-sar-flood",
+  "title": "Midleton SAR Flood Response",
+  "kicker": "Flood mapping / Sentinel-1 / Storm Babet",
+  "summary": "Multi-temporal Sentinel-1 backscatter change combined with rainfall radar, terrain, EPA boundaries, and qualitative error analysis to investigate detected new inundation during Storm Babet.",
+  "featured": true,
+  "date": "18 Oct 2023 · Sentinel-1A · 10 m grid",
+  "tags": ["Remote Sensing", "Python", "Cartography"],
+  "hero": "generated/midleton-sar/hero.webp",
+  "hero_alt": "Midleton terrain map showing detected new inundation in blue, permanent water, EPA subcatchments, and the 3.409 square kilometre receding-stage result",
+  "viewer": "midleton",
+  "question": "How much new open-water-like surface can be detected around Midleton during the late stage of Storm Babet using a same-orbit Sentinel-1 baseline, and how does that detection relate to radar-derived accumulated rainfall?",
+  "study_area": "Midleton, Ballinacurra, Waterrock, and relevant EPA WFD Cycle 3 catchments and subcatchments in County Cork, within a 507.8 km² mapping and qualitative review area.",
+  "outcome": "A reproducible receding-stage detection of 3.409 km² of new inundation in 803 retained regions, contextualised by 42 complete hourly radar accumulations and presented through five maps, a native web GIS viewer, an event card, and a captioned video.",
+  "role": "Data research, Sentinel-1 SAR preprocessing, change detection, rainfall analysis, cartography, web visualisation, quality assurance, and video communication.",
+  "method_note": "The shared summary records 3.4089 km², displayed here as 3.409 km². Values describe detected new inundation at the Sentinel-1 acquisition after the reported flood peak—not maximum inundation, a validated extent, flood depth, or an official warning product.",
+  "event_context": {
+    "title": "Storm Babet in Midleton",
+    "paragraphs": [
+      "Storm Babet brought significant rainfall to southern Ireland on 17–18 October 2023. The Arup/Cork County Council review describes fluvial flooding in Midleton and records 103.2 mm at N25 Midleton Bypass. Contemporary RTÉ reporting describes the Dungourney and Owenacurra rivers overtopping, rapid town-centre inundation, and mass evacuation.",
+      "The report places the town-centre flood peak at approximately 14:00–15:00 on 18 October. Sentinel-1A did not acquire the event scene until 18:15 UTC. This project therefore examines a later, generally receding-stage radar response—not the maximum extent or the full human and economic impact of the event."
+    ],
+    "facts": [
+      {"label": "Event", "value": "Storm Babet · 17–18 Oct 2023"},
+      {"label": "Reported town-centre peak", "value": "About 14:00–15:00 · 18 Oct"},
+      {"label": "N25 Midleton Bypass rainfall", "value": "103.2 mm · station total"},
+      {"label": "Sentinel-1A acquisition", "value": "18:15 UTC · later receding stage"}
+    ],
+    "sources": [
+      {"label": "Cork County Council / Arup event review", "url": "https://www.floodinfo.ie/frs/media/filer_public/5b/1f/5b1f191c-52a2-428b-b419-6704c3940628/252803_storm_babet_flood_event_report_draft_v2_part1.pdf"},
+      {"label": "RTÉ News · Midleton one month on", "url": "https://www.rte.ie/news/regional/2023/1119/1417314-midleton-flooding/"}
+    ]
+  },
+  "stats_source": "generated/midleton-sar/summary.json",
+  "stats": [
+    {"key": "detected_area_km2", "label": "Detected new inundation · receding-stage snapshot", "format": ".3f", "suffix": " km²"},
+    {"key": "retained_region_count", "label": "Retained regions after masks and cleanup", "format": "d"},
+    {"key": "radar_hours", "label": "Complete hourly radar accumulations", "format": "d"},
+    {"key": "snap_scenes_timed", "label": "Same-orbit Sentinel-1 acquisitions", "format": "d"}
+  ],
+  "methods": [
+    {"title": "Select a same-orbit time series", "text": "Validate sensor, relative orbit, ascending pass, polarisations, footprints, and acquisition identity. The event scene is Sentinel-1A on 18 October 2023 at 18:15 UTC; the same-orbit baseline scenes are 19 August, 24 September, and 6 October 2023. The event acquisition followed the reported flood peak, so timing is part of the interpretation rather than an omitted detail."},
+    {"title": "Reconstruct SAFE and ensure compatibility", "text": "Reconstruct the original Sentinel-1 SAFE directory structures from anonymously signed mirror assets. Transcode the ZSTD-compressed measurement TIFFs to Deflate for SNAP compatibility and verify that sample digital numbers are unchanged. Original compressed rasters and SAFE products remain local; only reviewed derivatives enter this portfolio."},
+    {"title": "Correct orbit, borders, and thermal noise", "text": "In SNAP 14, apply precise orbit information, remove GRD border noise, and remove thermal noise before calibration. Keeping these corrections ahead of filtering and geocoding makes the four scenes suitable for a common multi-temporal workflow."},
+    {"title": "Calibrate and filter backscatter", "text": "Calibrate VV and VH to sigma-naught (σ⁰), subset to the study area, and apply the fixed Refined Lee 7×7 speckle filter. Sensitivity diagnostics compare Lee 3×3 and 5×5 windows with the fixed 7×7 choice, including single-scene and three-scene baseline comparisons; these experiments measure methodological sensitivity, not accuracy."},
+    {"title": "Terrain-correct on a documented elevation blend", "text": "Use the LiDAR-priority/Copernicus blended elevation source for terrain correction to a standard 10 m ITM grid (EPSG:2157), retaining local-incidence and layover/shadow information. Twenty-six OPW Cork bare-earth LiDAR tiles from 2007 have priority where valid; Copernicus GLO-30 DSM fills substantial gaps. Source boundaries are documented and no vertical-datum reconciliation is claimed."},
+    {"title": "Build the baseline and change signal", "text": "Reproject linear sigma-naught onto the common analysis grid and convert to decibels. Calculate the per-pixel median of the three baseline VV scenes, then subtract that baseline from the event VV scene. The baseline/change formula below is applied consistently across the aligned grid; a negative change is a backscatter response, not a depth measurement."},
+    {"title": "Threshold, mask, and exclude artefacts", "text": "Retain candidates only where event VV ≤ −14 dB and ΔVV ≤ −4 dB. The water threshold is the nearest predeclared candidate to the 90th percentile over permanent water; the change threshold is the nearest candidate to the first percentile of stable-land change. Exclude permanent water, slopes above 8°, invalid geometry, and radar layover/shadow. Thresholds are sensitivity-tested, not calibrated against a restricted reference."},
+    {"title": "Clean, compare, and qualitatively review", "text": "Remove connected regions smaller than eight 10 m pixels (800 m²), reducing 3.8994 km² of candidates to 3.4089 km² in 803 retained regions. Compare the result with the complete 42-hour radar composite, 6/12/24-hour accumulations, maximum hourly rainfall, and EPA subcatchment statistics. Review candidate polygons for plausible false positives and negatives. Because no independent open reference extent is available for redistribution, precision, recall, and IoU are not claimed."}
+  ],
+  "tools": ["Python", "ESA SNAP 14", "Rasterio", "GeoPandas", "QGIS", "Leaflet"],
+  "formula_label": "Three-scene baseline and event-minus-baseline change",
+  "formula": "Bᵥᵥ(x) = median[VV₁(x), VV₂(x), VV₃(x)];  ΔVV(x) = VVevent(x) − Bᵥᵥ(x)",
+  "formula_text": "Bᵥᵥ is the per-pixel median of the 19 August, 24 September, and 6 October same-orbit VV scenes; VVevent is the 18 October acquisition. Detection requires VVevent ≤ −14 dB and ΔVV ≤ −4 dB before permanent-water, slope, geometry, and layover/shadow exclusions. All values are sigma-naught backscatter in decibels, not water depth.",
+  "maps": [
+    {"id": "detected-extent", "title": "Detected new inundation", "image": "generated/midleton-sar/01_midleton_flood_extent.webp", "alt": "Detected new inundation around Midleton and Ballinacurra on LiDAR-priority terrain with permanent water and EPA subcatchment context", "caption": "The cleaned receding-stage detection at 18:15 UTC on 18 October 2023: 3.409 km² in 803 retained regions. Radar context shows a 33.1 mm AOI mean over 42 complete hours. This is neither maximum inundation nor flood depth.", "crs": "ITM · EPSG:2157 · 10 m analysis grid"},
+    {"id": "sar-change", "title": "Baseline, event, and change", "image": "generated/midleton-sar/02_sar_before_event_change.webp", "alt": "Three panels comparing the three-scene VV baseline median, event-day VV, and event-minus-baseline backscatter change", "caption": "Calibrated, speckle-filtered sigma-naught VV provides the baseline and event evidence. Blue change indicates lower event backscatter; the final blue inundation polygons require both water and negative-change criteria plus exclusions.", "crs": "σ⁰ VV and ΔVV · dB · EPSG:2157"},
+    {"id": "rainfall-comparison", "title": "Rainfall before the SAR snapshot", "image": "generated/midleton-sar/03_rainfall_flood_comparison.webp", "alt": "Met Éireann 42-hour rainfall accumulation map and hourly rainfall evolution chart for the Midleton area", "caption": "Forty-two complete hourly Met Éireann ACRR accumulations span 17 October 00:00 to 18 October 18:00 UTC. AOI mean 33.1 mm; maximum accumulated radar cell 53.9 mm; peak hourly maximum 6.3 mm. Radar is not gauge-adjusted, and spatial association does not establish local causation.", "crs": "Met Éireann ACRR · mm · approximately 1 km native radar resolution"},
+    {"id": "candidate-review", "title": "Qualitative candidate review", "image": "generated/midleton-sar/04_qualitative_candidate_review.webp", "alt": "Unfiltered candidates, cleaned detections, and twelve numbered qualitative review locations around Midleton", "caption": "Review locations expose false-positive hypotheses such as smooth roads, roofs, bare ground, vegetation change, and border artefacts, alongside false-negative hypotheses including recession, urban vegetation, narrow channels, and roughened water. Numbered polygons are candidates, not confirmed errors.", "crs": "Qualitative evaluation · no independent open reference extent"},
+    {"id": "sensitivity-diagnostics", "title": "Threshold and filter sensitivity", "image": "generated/midleton-sar/05_threshold_sensitivity_diagnostics.webp", "alt": "Diagnostic charts for water and change thresholds, slope and region cleanup, backscatter evidence, and Lee filter and baseline sensitivity", "caption": "Predeclared threshold combinations, slope and minimum-region settings, and Lee 3×3/5×5 comparisons reveal how processing choices affect detected area. The fixed Refined Lee 7×7 workflow and three-scene median remain the reported configuration; none of these experiments is a validation accuracy score.", "crs": "Sensitivity experiments · detected area in km²"}
+  ],
+  "event_card": {
+    "image": "generated/midleton-sar/midleton_babet_event_card.webp",
+    "pdf": "generated/midleton-sar/midleton_babet_event_card.pdf",
+    "alt": "One-page Storm Babet event card combining the Midleton detected extent, acquisition timing, rainfall, method, and limitations",
+    "caption": "A one-page event card condenses the detected extent, same-orbit acquisitions, 42-hour radar window, processing sequence, and responsible-use limitations for rapid communication."
+  },
+  "video": {
+    "file": "generated/midleton-sar/midleton-sar-demo.mp4",
+    "duration": "2:30",
+    "aria_label": "Two minute 30 second captioned, silent Midleton SAR Flood Response demo",
+    "caption": "A 2:30 captioned, silent demo opens with Storm Babet and Midleton flood context, then moves through SAR processing, rainfall, candidate review, sensitivity, the web viewer, and limitations. A timed narration script is included below for a later voice-over; playback starts only on request.",
+    "script": "generated/midleton-sar/narration-script.md",
+    "narration": [
+      {"time": "0:00–0:15", "title": "Storm Babet context", "text": "Storm Babet brought prolonged heavy rain to Cork on 17 and 18 October 2023. In Midleton, the Dungourney and Owenacurra rivers overtopped, flooding homes and businesses and forcing evacuations. The N25 station recorded 103.2 millimetres."},
+      {"time": "0:15–0:25", "title": "Project result", "text": "This project maps the late-stage event using Sentinel-1 and rainfall radar, reporting 3.409 square kilometres of detected new inundation in 803 regions."},
+      {"time": "0:25–0:45", "title": "SAR processing and timing", "text": "I compared an 18 October acquisition, at 18:15 UTC, with a same-orbit median baseline from 19 August, 24 September and 6 October. After orbit and noise correction, calibration, Refined Lee filtering and terrain correction, I calculated event-minus-baseline VV change. This is a receding-stage snapshot."},
+      {"time": "0:45–1:00", "title": "Rainfall analysis", "text": "The rainfall workflow checks 42 complete hourly Met Éireann accumulations. The study-area mean is 33.1 millimetres. That radar average is deliberately not forced to agree with the 103.2 millimetre point-gauge total."},
+      {"time": "1:00–1:20", "title": "Detection and candidate review", "text": "Candidates require event VV of minus 14 decibels or less, and a VV drop of at least four decibels. Permanent water, steep slopes, invalid geometry and layover or shadow are excluded, followed by an eight-pixel minimum-region cleanup. Candidate review then examines plausible false positives and missed flooding."},
+      {"time": "1:20–1:35", "title": "Sensitivity and validation", "text": "Sensitivity experiments vary thresholds, masks, region size, baseline composition and Lee filter windows. Because there is no independent open reference extent, this remains qualitative evaluation: precision, recall and IoU are not claimed."},
+      {"time": "1:35–1:55", "title": "Interactive web GIS", "text": "The native Leaflet viewer makes the evidence inspectable. Switch between terrain, baseline, event and change, then compare permanent water, candidates and cleaned detections. Popups report area, backscatter, slope and subcatchment rainfall with explicit units."},
+      {"time": "1:55–2:10", "title": "Precomputed delivery", "text": "All web assets are precomputed and local. The portfolio makes no live GIS-service calls, works at a GitHub Pages subpath, and keeps attribution and limitations beside the map."},
+      {"time": "2:10–2:30", "title": "Reproducibility and responsible use", "text": "The GeoPackage, event card, source manifest and QA summaries provide reproducible evidence. This is historical research: a later-stage radar response, not a validated extent, depth product or official warning map, and not for emergency or property-level decisions."}
+    ]
+  },
+  "implemented_experiments": [
+    {"title": "Threshold and mask sensitivity", "text": "Compare event VV candidates from −20 to −14 dB with ΔVV candidates from −6 to −2 dB, then vary slope limits and minimum-region sizes. The reported VV ≤ −14 dB, ΔVV ≤ −4 dB, 8° slope, and eight-pixel settings remain explicit rather than being presented as universally optimal."},
+    {"title": "Speckle and baseline sensitivity", "text": "Compare Lee 3×3 and Lee 5×5 filtering with the fixed Refined Lee 7×7 workflow, and contrast a single 6 October baseline with the three-scene median. These experiments demonstrate processing sensitivity; no threshold or filter was selected to maximise agreement with the restricted reference."}
+  ],
+  "experiments_intro": "These precomputed diagnostics isolate threshold, mask, filter, and baseline choices. They show methodological sensitivity—not validation accuracy or operational forecast performance—and are documented in the fifth map.",
+  "evidence": [
+    {"skill": "SAR analysis", "text": "Same-orbit baseline, event VV, ΔVV, and explicit water/change thresholds.", "links": [{"label": "Baseline, event & change maps", "url": "#maps"}, {"label": "Threshold method", "url": "#methods"}]},
+    {"skill": "Rainfall analysis", "text": "Complete 42-hour composite, hourly evolution, and EPA subcatchment statistics in millimetres.", "links": [{"label": "Rainfall comparison", "url": "#maps"}, {"label": "Interactive EPA statistics", "url": "#maps"}]},
+    {"skill": "Scientific Python", "text": "Scripted raster/vector workflow with scene identities, software versions, licences, and checksums recorded.", "links": [{"label": "Reproducible workflow", "url": "#methods"}, {"label": "Source manifest", "url": "generated/midleton-sar/source-manifest.json"}]},
+    {"skill": "Validation", "text": "Qualitative candidate review plus threshold, mask, filter, and baseline sensitivity experiments; no invented accuracy metrics.", "links": [{"label": "Review & sensitivity maps", "url": "#maps"}, {"label": "Evaluation limits", "url": "#data"}]},
+    {"skill": "Cartography", "text": "Five coordinated figures and a one-page event card carry units, timing, attribution, and limitations.", "links": [{"label": "Five maps", "url": "#maps"}, {"label": "Event card PDF", "url": "generated/midleton-sar/midleton_babet_event_card.pdf"}]},
+    {"skill": "Web GIS", "text": "A native Leaflet viewer combines precomputed raster overlays and simplified vectors with layer controls and unit-aware popups.", "links": [{"label": "Open interactive viewer", "url": "#maps"}]},
+    {"skill": "Reproducibility", "text": "The source workflow records 20 passed QA checks and source-project browser verification; the revised 2:30 portfolio video is separately checked with a complete 4,500-frame decode.", "links": [{"label": "20-check QA summary", "url": "generated/midleton-sar/qa/final_qa.json"}, {"label": "Source browser QA", "url": "generated/midleton-sar/qa/browser_qa.json"}, {"label": "Video QA", "url": "generated/midleton-sar/qa/video_qa.json"}]},
+    {"skill": "Communication", "text": "A 2:30 captioned, silent demo with event context and a timed narration script, documented methods, and prominent limitations make the result interpretable without overstating it.", "links": [{"label": "Watch the demo", "url": "#overview"}, {"label": "Documentation", "url": "#methods"}, {"label": "Explicit limitations", "url": "#data"}]}
+  ],
+  "data": [
+    {"name": "Sentinel-1 IW GRD VV/VH", "provider": "Copernicus / ESA; Microsoft Planetary Computer mirror", "details": "Four Sentinel-1A ascending relative-orbit-1 scenes: the 18 October 2023 event and same-orbit baseline acquisitions on 19 August, 24 September, and 6 October. Dual VV/VH polarisation supports change detection and qualitative evidence review.", "license": "Copernicus data use; source attribution required", "url": "https://dataspace.copernicus.eu/explore-data/data-collections/sentinel-data/sentinel-1"},
+    {"name": "Irish radar October 2023 ACRR composite", "provider": "Met Éireann", "details": "Forty-two complete one-hour precipitation accumulations from 17 October 00:00 to 18 October 18:00 UTC, with no missing or duplicate hourly bins. Radar is not adjusted to match station point totals.", "license": "CC BY 4.0", "url": "https://opendata2.met.ie/radar/oct2023/202310_PASH21.zip"},
+    {"name": "OPW Cork bare-earth LiDAR DTM", "provider": "Geological Survey Ireland / Office of Public Works", "details": "Twenty-six intersecting river-corridor tiles captured in 2007, prioritised where valid and aggregated to the 10 m ITM analysis grid. Coverage is sparse, so the LiDAR does not cover the full grid.", "license": "CC BY 4.0; Irish Public Sector Data attribution retained", "url": "https://www.arcgis.com/home/item.html?id=0cf979c135744df5bf51b11df9a6d820"},
+    {"name": "Copernicus DEM GLO-30", "provider": "Copernicus", "details": "Broad-coverage 30 m surface elevation used only where OPW LiDAR is unavailable. This is DSM rather than bare-earth DTM; source boundaries, capture dates, and vertical references are documented, with no vertical-datum reconciliation claimed.", "license": "Copernicus data use; attribution required", "url": "https://registry.opendata.aws/copernicus-dem/"},
+    {"name": "EPA Water Framework Directive Cycle 3 layers", "provider": "Environmental Protection Agency", "details": "WFD subcatchments, catchments, and suitable river, lake, and transitional water bodies provide management context, permanent-water geometry, and zonal rainfall summaries. Cycle 3 boundaries are not historical flood observations.", "license": "CC BY 4.0", "url": "https://gis.epa.ie/geoserver/EPA/wfs"},
+    {"name": "OpenStreetMap water and roads", "provider": "OpenStreetMap contributors", "details": "OpenStreetMap supplements permanent-water geometry and provides major-road and cartographic context. Distributed OSM-derived vectors remain under ODbL.", "license": "ODbL 1.0", "url": "https://www.openstreetmap.org/copyright"},
+    {"name": "Storm Babet Flood Event Report, Draft 2", "provider": "Cork County Council / Arup", "details": "Contextual evidence only for event timing, rainfall, and flood mechanisms. The report's 103.2 mm N25 Midleton Bypass point total uses different spatial support from the radar area summary. No report pages, photographs, or digitised reference polygons are republished.", "license": "No open redistribution licence confirmed; no numerical accuracy metrics derived", "url": "https://www.floodinfo.ie/frs/media/filer_public/5b/1f/5b1f191c-52a2-428b-b419-6704c3940628/252803_storm_babet_flood_event_report_draft_v2_part1.pdf"}
+  ],
+  "caveat_title": "A receding-stage detection, not a validated flood extent.",
+  "caveat": "Qualitative evaluation — no independent open reference extent. The satellite acquisition followed the reported flood peak; urban vegetation, buildings, narrow channels, rough water, co-registration, radar geometry, terrain-source transitions, and threshold/mask choices can conceal flooding or create water-like candidates. Smooth roads, roofs, bare ground, and soil or vegetation change may produce false positives, while review polygons remain unverified candidates. Precision, recall, and IoU are deliberately not claimed. This historical research is not maximum inundation, a validated extent, flood depth, property damage assessment, or an official warning product; never use it for emergency, property, insurance, planning, or navigation decisions.",
+  "order": 2
+}

@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"name": "study_area",
+"features": [
+{ "type": "Feature", "properties": { "event_id": "storm-babet-midleton-2023", "name": "Midleton mapping and qualitative review area", "area_km2": 507.771 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -8.0, 51.7999222 ], [ -8.0, 52.0204253 ], [ -8.3015958, 52.0200393 ], [ -8.3001224, 51.7995392 ], [ -8.0, 51.7999222 ] ] ] } }
+]
+}

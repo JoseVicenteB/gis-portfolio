@@ -1,0 +1,13 @@
+{
+  "decode_return_code": 0,
+  "duration": "Duration: 00:02:30.00, start: 0.000000, bitrate: 265 kb/s",
+  "duration_seconds": 150,
+  "width": 1920,
+  "height": 1080,
+  "frame_rate": 30,
+  "decoded_frame_count": 4500,
+  "bytes": 4969891,
+  "audio": false,
+  "context_intro": true,
+  "passed": true
+}

@@ -1,0 +1,108 @@
+{
+  "event": "storm-babet-midleton-2023",
+  "generated_utc": "2026-11-09T11:44:05.918877+00:00",
+  "software": {
+    "python": "3.11.5",
+    "snap": "14.0.0",
+    "qgis_project_target": "QGIS 3.36+",
+    "python_packages": {
+      "numpy": "2.4.6",
+      "rasterio": "1.4.4",
+      "scipy": "1.17.1",
+      "shapely": "2.2.0",
+      "pyproj": "3.7.2",
+      "geopandas": "1.2.0",
+      "pandas": "3.1.1",
+      "pyogrio": "0.13.0",
+      "matplotlib": "3.11.2",
+      "pillow": "12.3.0",
+      "requests": "2.34.2",
+      "h5py": "3.16.0",
+      "pymupdf": "1.28.2",
+      "imageio-ffmpeg": "0.8.1"
+    }
+  },
+  "datasets": [
+    {
+      "name": "Sentinel-1 IW GRD VV/VH",
+      "provider": "Copernicus / ESA; Microsoft Planetary Computer mirror",
+      "role": "Three-scene pre-event baseline and event-day acquisition",
+      "scene_inventory": "data/inventory/sar_scenes.json",
+      "licence": "Copernicus data use; source attribution required",
+      "access_note": "Anonymous temporary SAS signing. No signed URL or credential is stored.",
+      "scene_ids": [
+        "S1A_IW_GRDH_1SDV_20231006T181500_20231006T181525_050648_061A18_D169",
+        "S1A_IW_GRDH_1SDV_20230924T181500_20230924T181525_050473_06141A_1C75",
+        "S1A_IW_GRDH_1SDV_20230819T181459_20230819T181524_049948_06022D_9043",
+        "S1A_IW_GRDH_1SDV_20231018T181500_20231018T181525_050823_06201F_04AE"
+      ]
+    },
+    {
+      "name": "Irish radar files — October 2023 ACRR composite",
+      "provider": "Met Éireann",
+      "url": "https://opendata2.met.ie/radar/oct2023/202310_PASH21.zip",
+      "role": "42 one-hour precipitation accumulations ending 17–18 October 2023",
+      "licence": "CC BY 4.0",
+      "archive_sha256": "37a0d70eed5e85e2ce103e6e78ed4575879ee6f3e39f63b6f070f0291c313704",
+      "source_note": "HDF how/nodes values are retained in outputs/validation/rainfall_qc.json. No gauge-based adjustment is applied."
+    },
+    {
+      "name": "OPW Cork bare-earth LiDAR DTM",
+      "provider": "Geological Survey Ireland / Office of Public Works",
+      "role": "Nominal catalogue resolution 2 m; delivered raster approximately 0.125 m; 26 intersecting river-corridor tiles aggregated to a 10 m analysis grid",
+      "capture_year": 2007,
+      "licence": "CC BY 4.0",
+      "attribution": "Contains Irish Public Sector Data (Geological Survey Ireland & the Office of Public Works) licensed under a Creative Commons Attribution 4.0 International (CC BY 4.0) licence.",
+      "tile_inventory": "data/inventory/lidar_tiles.json",
+      "note": "River-corridor coverage is sparse; LiDAR has priority where valid but does not cover the full analysis grid."
+    },
+    {
+      "name": "Copernicus DEM GLO-30",
+      "provider": "Copernicus",
+      "url": "https://registry.opendata.aws/copernicus-dem/",
+      "role": "Broad-coverage 30 m surface elevation used only where OPW LiDAR is unavailable",
+      "licence": "Copernicus data use; attribution required",
+      "note": "This is DSM, not bare-earth DTM. Source boundaries, capture dates and vertical references are documented in terrain_qc.json; no vertical-datum reconciliation is claimed."
+    },
+    {
+      "name": "EPA Water Framework Directive spatial layers",
+      "provider": "Environmental Protection Agency",
+      "url": "https://gis.epa.ie/geoserver/EPA/wfs",
+      "layers": [
+        "EPA:WFD_SubCatchments",
+        "EPA:WFD_Catchments",
+        "EPA:WFD_RIVERWATERBODIES_CYCLE3",
+        "EPA:WFD_LAKEWATERBODIES_CYCLE3",
+        "EPA:WFD_TRANSITIONALWATERBODIES_CYCLE3"
+      ],
+      "role": "Catchment context, zonal rainfall summaries and suitable permanent-water geometry",
+      "licence": "CC BY 4.0",
+      "note": "Cycle 3 layers are current management boundaries, not historical flood observations."
+    },
+    {
+      "name": "OpenStreetMap water and roads",
+      "provider": "OpenStreetMap contributors",
+      "url": "https://www.openstreetmap.org/copyright",
+      "role": "Permanent-water supplementation and map context",
+      "licence": "ODbL 1.0"
+    },
+    {
+      "name": "Midleton Flood Relief Scheme — Storm Babet Flood Event Report, Draft 2",
+      "provider": "Cork County Council / Arup",
+      "urls": [
+        "https://www.floodinfo.ie/frs/media/filer_public/5b/1f/5b1f191c-52a2-428b-b419-6704c3940628/252803_storm_babet_flood_event_report_draft_v2_part1.pdf",
+        "https://www.floodinfo.ie/frs/media/filer_public/6f/86/6f86f19c-aff4-4f0c-901d-24ef27d4b584/appendix_a-_observed_vs_modelled_flood_extent_maps.pdf"
+      ],
+      "role": "Event timeline, rainfall context and qualitative flood-mechanism evidence",
+      "licence": "No open redistribution licence confirmed",
+      "restriction": "Do not publish report figures, photographs or digitised reference polygons without permission. No numerical accuracy metrics are derived from the restricted reference in this project."
+    }
+  ],
+  "rainfall_context": {
+    "source": "Arup/Cork County Council report, Table 2, page 12",
+    "n25_midleton_bypass_total_mm": 103.2,
+    "roches_point_total_mm": 89.7,
+    "youghal_wwtp_total_mm": 120.7,
+    "note": "Station point totals and radar area estimates use different spatial and temporal supports. They are context, not a calibration or correction applied to the radar grid."
+  }
+}
